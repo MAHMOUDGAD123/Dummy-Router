@@ -30,7 +30,7 @@ export default class extends AbstractView {
             <i class="fa-solid fa-circle-user text-dodgerblue text-[4.5rem]"></i>
           </div>
           <h1 class='text-dodgerblue font-saira w-fit mx-auto text-[2.5rem] font-extrabold'>${userData.username}</h1>
-          <div class='flex flex-col gap-[20px] text-start'>
+          <div class='flex flex-col gap-[20px] text-start *:break-words'>
             <p class='opacity-85 bg-dodgerblue_30 p-[20px] rounded-2xl'><span class='text-dodgerblue font-extrabold'>Name:</span> ${userData.name}</p>
             <p class='opacity-85 bg-dodgerblue_30 p-[20px] rounded-2xl'><span class='text-dodgerblue font-extrabold'>Phone:</span> ${userData.phone}</p>
             <p class='opacity-85 bg-dodgerblue_30 p-[20px] rounded-2xl'><span class='text-dodgerblue font-extrabold'>Email:</span> ${userData.email}</p>
