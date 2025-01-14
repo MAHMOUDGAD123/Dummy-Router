@@ -1,5 +1,7 @@
+import { waitFor } from "@/utils/tools";
 import AbstractView from "./AbstractView";
 import Router from "@/router/router";
+import { FAKE_LOADING_MAX } from "@/utils/contants";
 
 export default class extends AbstractView {
   private params = Router.useParams() as { id: string };
@@ -17,6 +19,9 @@ export default class extends AbstractView {
           res.json()
         )) as Info.UserInfoType[]
       )[+this.params.id - 1];
+
+      // fake server await
+      await waitFor(FAKE_LOADING_MAX);
 
       return `
         <div class='flex flex-col p-[30px] gap-[20px] justify-center max-w-[600px] mx-auto my-[30px]'>

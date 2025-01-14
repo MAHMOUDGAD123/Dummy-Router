@@ -56,7 +56,8 @@ export default class Router {
   private updateCurrent = (dummyRoute: Router.DummyRoute, path: string) => {
     Router._current = dummyRoute;
     Router._currentPath = path;
-    new dummyRoute.view().render();
+    const view = new dummyRoute.view();
+    view.render(path);
   };
 
   private buildRouteMap = (routes: Router.Route[]) => {
@@ -122,10 +123,10 @@ export default class Router {
 
   private logger = async () => {
     if (import.meta.env.DEV) {
-      console.clear();
-      console.log("current:", Router.current);
-      console.log("current-path:", Router.currentPath);
-      console.log("history-state:", Router.historyState);
+      // console.clear();
+      // console.log("current:", Router.current);
+      // console.log("current-path:", Router.currentPath);
+      // console.log("history-state:", Router.historyState);
       // console.log("routeMap:", this.routeMap);
     }
   };

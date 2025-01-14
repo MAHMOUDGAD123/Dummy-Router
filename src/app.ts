@@ -15,12 +15,12 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <a-link to="/" class="logo">
       <img src="${routerLogo}" alt="logo"/>
       <span>
-        <i class="fa-solid fa-r"></i>
-        <i class="fa-solid fa-face-grin-tongue-wink dummy"></i>
-        <i class="fa-solid fa-u"></i>
-        <i class="fa-solid fa-t"></i>
-        <i class="fa-solid fa-e"></i>
-        <i class="fa-solid fa-r"></i>
+        <span class='font-saira'>R</span>
+        <i class="fa-solid fa-face-grin-tongue-wink"></i>
+        <span class='font-saira'>U</span>
+        <span class='font-saira'>T</span>
+        <span class='font-saira'>E</span>
+        <span class='font-saira'>R</span>
       </span>
     </a-link>
   </header>

@@ -1,4 +1,6 @@
+import { waitFor } from "@/utils/tools";
 import AbstractView from "./AbstractView";
+import { FAKE_LOADING_MAX } from "@/utils/contants";
 
 export default class extends AbstractView {
   constructor() {
@@ -10,6 +12,9 @@ export default class extends AbstractView {
       const usersData = (await fetch("/db/users.json").then((res) =>
         res.json()
       )) as Info.UserInfoType[];
+
+      // fake server await
+      await waitFor(FAKE_LOADING_MAX);
 
       return `
         <div class='flex flex-wrap *:[flex-basis:150px] p-[30px] gap-[20px] justify-center'>
