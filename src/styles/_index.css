@@ -22,6 +22,8 @@
   --sec-col: #1e90ff95;
   --trans: 300ms;
 
+  scroll-behavior: smooth;
+  scrollbar-width: none;
   font-family: robotomono, monospace, sans-serif;
   font-weight: 400;
   font-synthesis: none;
@@ -105,7 +107,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: light-dark(#dddddd, #111111);
+  background-color: light-dark(#dddddd, #353535);
   cursor: pointer;
   transition: background-color var(--trans);
   user-select: none;

@@ -1,2 +1,2 @@
 export const MAIN_ELEMENT_SELECTOR = "main";
-export const FAKE_LOADING_MAX = 1000;
+export const FAKE_LOADING_MAX = 0;

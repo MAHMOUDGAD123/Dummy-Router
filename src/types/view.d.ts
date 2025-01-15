@@ -4,7 +4,9 @@ declare namespace View {
     getHTML(): Promise<string>;
     render(currentPath: string): Promise<void>;
     error(error: Error): Promise<string>;
-    loading(): Promise<void>;
+    loading(currentPath: string): Promise<void>;
+    canRenderLoadingState: boolean;
+    loadingStateRenderDelay: number; // ms
   }
 
   type ViewConstructor = new () => AbstractViewType;

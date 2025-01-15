@@ -1,30 +1,23 @@
+import NotFound from "@/components/view/NotFound";
 import PATH from "@/utils/path";
 
 export default class Router {
-  private static _instance: Router | null = null;
+  private static __instance: Router | null = null;
   private static _current: Router.DummyRoute | null = null;
   private static _currentPath: string = "";
   private _routeMap: Map<string, Router.DummyRoute> | null = null;
-  private _notFoundView: View.ViewConstructor | null = null;
 
-  constructor(routes: Router.Routes) {
-    if (Router._instance) return Router._instance; // force singleton
+  constructor(routes: Router.Route[]) {
     // page load
-    const { data, notFoundView } = routes;
-    this._notFoundView = notFoundView;
-    this.buildRouteMap(data);
+    if (Router.__instance) return Router.__instance; // force singleton
+    this.buildRouteMap(routes);
     const fixedLoc = PATH.fixPath(location.pathname);
     const matchedDummyRoute = this.matchPath(fixedLoc);
     this.historyReplace(fixedLoc); // to set the initial history state to avoid (null)
-
-    if (matchedDummyRoute) {
-      this.updateCurrent(matchedDummyRoute, fixedLoc);
-    } else {
-      this.renderNotFound();
-    }
+    this.updateCurrent(matchedDummyRoute, fixedLoc);
     this.setActiveLinks();
     this.logger();
-    Router._instance = this; // set the singleton instance
+    Router.__instance = this; // set the singleton instance
   }
 
   // PRIVATES
@@ -39,25 +32,23 @@ export default class Router {
     return dummyRoute;
   };
 
-  private renderNotFound = () => {
-    const path = location.pathname;
-    this.updateCurrent(
-      {
-        path,
-        dummyPath: "",
-        params: null,
-        view: this._notFoundView!,
-        static: PATH.getStaticRoutes(path),
-      },
-      path
-    );
+  private dummyNotFoundRoute = (path: string) => {
+    return {
+      path: "",
+      dummyPath: "",
+      params: null,
+      view: NotFound,
+      static: PATH.getStaticRoutes(path),
+    };
   };
 
-  private updateCurrent = (dummyRoute: Router.DummyRoute, path: string) => {
-    Router._current = dummyRoute;
+  private updateCurrent = (
+    dummyRoute: Router.DummyRoute | undefined,
+    path: string
+  ) => {
+    Router._current = dummyRoute ?? this.dummyNotFoundRoute(path);
     Router._currentPath = path;
-    const view = new dummyRoute.view();
-    view.render(path);
+    new Router.current.view().render(path);
   };
 
   private buildRouteMap = (routes: Router.Route[]) => {
@@ -123,9 +114,9 @@ export default class Router {
 
   private logger = async () => {
     if (import.meta.env.DEV) {
-      // console.clear();
-      // console.log("current:", Router.current);
-      // console.log("current-path:", Router.currentPath);
+      console.clear();
+      console.log("current:", Router.current);
+      console.log("current-path:", Router.currentPath);
       // console.log("history-state:", Router.historyState);
       // console.log("routeMap:", this.routeMap);
     }
@@ -154,13 +145,8 @@ export default class Router {
 
       if (dummyPath !== Router.current.dummyPath) {
         const matchedDummyRoute = this.matchPath(path);
-
-        if (matchedDummyRoute) {
-          this.navigateTo(path, linkEle.getAttribute("replace") !== null);
-          this.updateCurrent(matchedDummyRoute, path);
-        } else {
-          this.renderNotFound();
-        }
+        this.navigateTo(path, linkEle.getAttribute("replace") !== null);
+        this.updateCurrent(matchedDummyRoute, path);
         this.setActiveLinks();
         this.logger();
       }
@@ -170,12 +156,7 @@ export default class Router {
   public popStateNavigation = async () => {
     const path = Router.historyState.path;
     const matchedDummyRoute = this.matchPath(path);
-
-    if (matchedDummyRoute) {
-      this.updateCurrent(matchedDummyRoute, path);
-    } else {
-      this.renderNotFound();
-    }
+    this.updateCurrent(matchedDummyRoute, path);
     this.setActiveLinks();
     this.logger();
   };

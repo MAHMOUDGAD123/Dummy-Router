@@ -5,11 +5,6 @@ declare namespace Router {
     name: string;
   };
 
-  type Routes = {
-    data: Route[];
-    notFoundView: View.ViewConstructor;
-  };
-
   type DummyRoute = {
     path: string;
     dummyPath: string;

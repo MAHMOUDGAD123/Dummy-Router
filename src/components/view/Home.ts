@@ -14,8 +14,8 @@ export default class extends AbstractView {
         <span class='text-dodgerblue'>Dummy Router</span>
       </h1>
 
-      <p class='text-[1.25rem] font-bold'>
-        This is a dumdum dummy client-side router built by plain 
+      <p class='text-[1.25rem] font-bold px-[20px]'>
+        This is a dumdum client-side router built by plain 
         <span class='text-dodgerblue font-extrabold'>Javascript</span> 
         and native browser APIs it supports fast dynamic routing
         using the (<span class='text-dodgerblue'>Dummy Algorithm</span>).
@@ -23,9 +23,9 @@ export default class extends AbstractView {
 
       <p class='opacity-70 margin max-w-[400px] text-[0.85rem] font-bold mb-[20px]'>
         <i class="fa-solid fa-triangle-exclamation"></i>
-        This Router was built in a couple of days so don't be dummy and don't
-        use it in production directly first you need to test it, customize it,
-        or do what ever you want before using it - you know what just don't use it at all.
+        This Router was built in a couple of days so don't
+        use it in production directly first you need to test it, customize it, 
+        do what ever you want before using it, or don't use it at all.
       </p>
 
       <a-link to="/docs" class='w-fit [&:hover_i]:animate-pulse'>

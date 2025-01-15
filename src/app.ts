@@ -36,10 +36,12 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 
   <footer class='flex items-center justify-center gap-[10px] font-saira py-[7px] bg-footer'>
     <span class='font-bold'>Powered by</span>
-    <span class='by font-extrabold flex items-center gap-[5px]'>
+    <div class='by font-extrabold flex items-center gap-[5px]'>
       <i class="fa-solid fa-bolt-lightning animate-pulse text-dodgerblue"></i>
-      <span class='text-dodgerblue'>Vite</span>
+      <a href='https://vite.dev/' target='_blank'>
+        <span class='text-dodgerblue'>Vite</span>
+      </a>
       <i class="fa-solid fa-bolt-lightning animate-pulse text-dodgerblue"></i>
-    </span>
+    </div>
   </footer>
 `;
