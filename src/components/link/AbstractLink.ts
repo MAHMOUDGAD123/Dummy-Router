@@ -1,25 +1,26 @@
 export default class AbstractLink extends HTMLElement {
-  protected readonly linkEle: HTMLAnchorElement;
-  protected readonly href: string;
-  protected readonly replace: boolean = this.getAttribute("replace") !== null;
-
   constructor(private readonly type: "link" | "nav-link") {
     super();
-    this.href = this.getAttribute("to")!;
+    const href = this.getAttribute("to")!;
     const parent = this.parentElement!;
     const children = this.innerHTML;
-    const replace = this.replace ? "replace" : "";
+    const replace = this.getAttribute("replace") !== null ? "replace" : "";
+    const strictActive =
+      this.getAttribute("strict-active") !== null ? "strict-active" : "";
+    const className = this.getAttribute("class");
     const ID = crypto.randomUUID().split("-")[0];
     const linkData =
       this.type === "nav-link"
         ? `data-link='${ID}' data-nav`
         : `data-link='${ID}'`;
-    this.outerHTML = `<a class='${this.className}' href='${this.href}' ${replace} ${linkData}></a>`;
-    this.linkEle = parent.querySelector(
+    this.outerHTML = `<a href='${href}' ${replace} ${strictActive} ${linkData}></a>`;
+    const linkEle = parent.querySelector(
       `[data-link='${ID}']`
     )! as HTMLAnchorElement;
-    this.linkEle.setAttribute("data-link", "");
-    this.linkEle.setAttribute("data-link", "");
-    this.linkEle.innerHTML = children;
+    if (className) {
+      linkEle.setAttribute("class", className);
+    }
+    linkEle.setAttribute("data-link", "");
+    linkEle.innerHTML = children;
   }
 }

@@ -1,0 +1,369 @@
+<div
+  class="bg-[#151515] pagination min-h-[300px] h-main *:flex *:flex-col *:items-center *:gap-[30px] *:justify-center *:p-[20px] font-extrabold [scrollbar-width:none] grid grid-cols-[100%] [grid-auto-rows:100%] [scroll-snap-type:y_mandatory] *:[scroll-snap-align:center] *:[scroll-snap-stop:always] [scroll-behavior:smooth] overflow-auto"
+>
+  <!-- Page 1 -->
+  <div>
+    <h1 class="text-docsH2">
+      So, what is
+      <span class="font-saira text-dodgerblue">Dummy Alogorithm</span>
+      & how this router works?
+    </h1>
+    <span>Let's take a look</span>
+    <i
+      class="fa-solid fa-angles-down text-docsArrow mt-[30px] animate-bounce text-dodgerblue"
+    ></i>
+  </div>
+
+  <!-- Page 2 -->
+  <div>
+    <h1>
+      <span class="text-docsH1 font-saira text-dodgerblue">Dummy Router</span>
+      <span class="text-docsH3">have 3 actions</span>
+    </h1>
+    <div
+      class="flex flex-wrap gap-[20px] items-center justify-center *:flex *:gap-[7px] *:items-center *:bg-dodgerblue_30"
+    >
+      <span class="p-[10px] rounded-md"
+        ><span class="text-dodgerblue">1-</span>Page Load</span
+      >
+      <span class="p-[10px] rounded-md"
+        ><span class="text-dodgerblue">2-</span>Link Click</span
+      >
+      <span class="p-[10px] rounded-md"
+        ><span class="text-dodgerblue">3-</span>PopState Event</span
+      >
+    </div>
+  </div>
+
+  <!-- Page 3 -->
+  <div>
+    <h1 class="text-docsH3 p-[10px] rounded-md bg-dodgerblue_30">
+      <span class="text-dodgerblue">1- </span>Page Load
+    </h1>
+    <p>
+      At page load the router take the
+      <span class="text-dodgerblue">routes</span>
+      and build the <span class="text-dodgerblue">routesMap</span> from it. This
+      action has few steps explained next.
+    </p>
+  </div>
+
+  <!-- Page 4 -->
+  <div>
+    <span class="font-saira text-dodgerblue_95 text-docsH1">STEP 1</span>
+    <p>
+      The router takes every route and convert it into a somthing called the
+      <span class="text-dodgerblue">Dummy Route</span>.
+    </p>
+  </div>
+
+  <!-- Page 5 -->
+  <div class="text-docstxt">
+    <div
+      class="bg-dodgerblue_20 w-fit p-[10px] rounded-lg flex flex-col items-start"
+    >
+      <span class="text-dodgerblue text-docsH4 w-full text-center mb-[10px]"
+        >Route</span
+      >
+      <div>
+        <span class="text-dodgerblue_80">path: </span>
+        <span>"/users/[id]"</span>
+      </div>
+      <div>
+        <span class="text-dodgerblue_80">view: </span>
+        <span>f</span>
+      </div>
+    </div>
+
+    <i
+      class="fa-solid fa-arrow-down-long text-docsArrow text-dodgerblue_95 animate-bounce"
+    ></i>
+
+    <div
+      class="bg-dodgerblue_20 w-fit p-[10px] rounded-lg flex flex-col items-start"
+    >
+      <span class="text-dodgerblue text-docsH4 w-full text-center mb-[10px]"
+        >Dummy Route</span
+      >
+      <div>
+        <span class="text-dodgerblue_80">path: </span>
+        <span>"/users/[id]"</span>
+      </div>
+      <div>
+        <span class="text-dodgerblue_80">dummyPath: </span>
+        <span>"/users/[x]"</span>
+      </div>
+      <div>
+        <span class="text-dodgerblue_80">parms: </span>
+        <span>['id']</span>
+      </div>
+      <div>
+        <span class="text-dodgerblue_80">static: </span>
+        <span>['users']</span>
+      </div>
+      <div>
+        <span class="text-dodgerblue_80">view: </span>
+        <span>f</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 6 -->
+  <div class="text-docstxt text-start">
+    <span class="text-docsH3 bg-dodgerblue_30 p-[10px] rounded-lg"
+      >/users/[id]</span
+    >
+
+    <div>
+      <div class="w-full">
+        <span class="text-dodgerblue">dummyRoute: </span>
+        <span
+          >will be used as the keys for the
+          <span class="text-dodgerblue_95">routeMap</span> itself.</span
+        >
+      </div>
+
+      <div class="w-full">
+        <span class="text-dodgerblue">params: </span>
+        <span
+          >is the array that contains all the dynamic params of the path
+          ['id']</span
+        >.
+      </div>
+
+      <div class="w-full">
+        <span class="text-dodgerblue">static: </span>
+        <span
+          >is the array that contains all the static parts of the path ['users']
+          and will be used with the
+          <span class="text-dodgerblue_95 whitespace-nowrap">nav-link</span>s
+          will explain that later.</span
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 7 -->
+  <div>
+    <span class="font-saira text-dodgerblue_95 text-docsH1">STEP 2</span>
+    <p>
+      The router will take the
+      <span class="text-dodgerblue">window</span> (location.pathname) and
+      convert it to a <span class="text-dodgerblue">fixedPath</span> and then to
+      a <span class="text-dodgerblue">dummyPath</span> to match it with the the
+      same <span class="text-dodgerblue">dummyPath</span> in the
+      <span class="text-dodgerblue">routeMap</span>.
+    </p>
+  </div>
+
+  <!-- Page 8 -->
+  <div class="text-docstxt *:flex *:flex-col *:items-center">
+    <div
+      class="bg-dodgerblue_30 w-fit p-[10px] rounded-lg flex flex-col items-start"
+    >
+      <span class="text-dodgerblue text-docsH4 w-full text-center mb-[10px]"
+        >location.pathname</span
+      >
+      <span>users//[id]/</span>
+    </div>
+
+    <i
+      class="fa-solid fa-arrow-down-long text-dodgerblue_95 animate-bounce"
+    ></i>
+
+    <div
+      class="bg-dodgerblue_30 w-fit p-[10px] rounded-lg flex flex-col items-start"
+    >
+      <span class="text-dodgerblue text-docsH4 w-full text-center mb-[10px]"
+        >fixedPath</span
+      >
+      <span>/users/[id]</span>
+    </div>
+
+    <i
+      class="fa-solid fa-arrow-down-long text-dodgerblue_95 animate-bounce"
+    ></i>
+
+    <div
+      class="bg-dodgerblue_30 w-fit p-[10px] rounded-lg flex flex-col items-start"
+    >
+      <span class="text-dodgerblue text-docsH4 w-full text-center mb-[10px]"
+        >dummyPath</span
+      >
+      <span>/users/[x]</span>
+    </div>
+  </div>
+
+  <!-- Page 9 -->
+  <div>
+    <span class="font-saira text-dodgerblue_95 text-docsH1">STEP 3</span>
+    <p>
+      In this step the router will match the
+      <span class="text-dodgerblue">dummyPath</span> with the same one in the
+      <span class="text-dodgerblue">routeMap</span> which is a javaScript
+      <span class="text-dodgerblue">Map</span>(hash table).
+    </p>
+  </div>
+
+  <!-- Page 10 -->
+  <div class="text-docstxt">
+    <div class="bg-dodgerblue_30 p-[10px] rounded-2xl">
+      <span class="text-dodgerblue">routeMap</span>.get(<span
+        class="text-dodgerblue_95"
+        >/users/[id]</span
+      >)
+    </div>
+
+    <span class="bg-dodgerblue_80 p-[10px] rounded-full"
+      >match <i class="fa-solid fa-circle-check text-dodgerblue"></i
+    ></span>
+
+    <i class="fa-solid fa-down-long"></i>
+
+    <p>Render the matched view</p>
+
+    <span class="bg-dodgerblue_80 p-[10px] rounded-full"
+      >not match <i class="fa-solid fa-circle-xmark text-dodgerblue"></i
+    ></span>
+
+    <i class="fa-solid fa-down-long"></i>
+
+    <p>Render the NotFound view</p>
+  </div>
+
+  <!-- Page 11 -->
+  <div>
+    <h1 class="text-docsH3 p-[10px] rounded-md bg-dodgerblue_30">
+      <span class="text-dodgerblue">2- </span>Link Click
+    </h1>
+    <p>
+      On Link click the router do the same process as the (Page Load) but with
+      small differences.
+    </p>
+  </div>
+
+  <!-- Page 12 -->
+  <div>
+    <p>
+      The router will first convert the pathname of the link's
+      <span class="text-dodgerblue">href</span> to a
+      <span class="text-dodgerblue">dummyPath</span> and then compaire it with
+      the <span class="text-dodgerblue">dummyPath</span> of the current
+      <span class="text-dodgerblue">dummy route</span> before matching it with
+      the <span class="text-dodgerblue">routeMap</span>.
+    </p>
+  </div>
+
+  <!-- Page 13 -->
+  <div class="text-docstxt">
+    <div class="flex flex-col gap-[15px]">
+      <div class="bg-dodgerblue_30 p-[10px] rounded-2xl">
+        <span class="text-dodgerblue">link</span>
+        <span>===</span>
+        <span class="text-dodgerblue">current</span>
+      </div>
+
+      <span class="bg-dodgerblue_80 p-[10px] rounded-full"
+        >The same path <i class="fa-solid fa-circle-check text-dodgerblue"></i
+      ></span>
+
+      <i class="fa-solid fa-down-long"></i>
+
+      <p>The router do nothing to avoid navigate to the same path</p>
+
+      <span class="bg-dodgerblue_80 p-[10px] rounded-full"
+        >not the same <i class="fa-solid fa-circle-xmark text-dodgerblue"></i
+      ></span>
+
+      <i class="fa-solid fa-down-long"></i>
+
+      <p>The router do the match and navigate if matches</p>
+    </div>
+  </div>
+
+  <!-- Page 14 -->
+  <div>
+    <h1 class="text-docsH3 p-[10px] rounded-md bg-dodgerblue_30">
+      <span class="text-dodgerblue">3- </span>PopState Event
+    </h1>
+    <p>
+      When you go <span class="text-dodgerblue">forward</span> and
+      <span class="text-dodgerblue">back</span> throw the browser history this
+      will trigger the <span class="text-dodgerblue">popstate</span> event.
+    </p>
+  </div>
+
+  <!-- Page 15 -->
+  <div>
+    <p>
+      In this action the browser will just match the path from the browser
+      history and update the current
+      <span class="text-dodgerblue">dummyRoute</span> in memory and render it's
+      view.
+    </p>
+  </div>
+
+  <!-- Page 16 -->
+  <div>
+    <h1 class="text-dodgerblue font-saira text-docsH1">Nav-link States</h1>
+
+    <p>
+      The nav-link have 3 states depends on the
+      <span class="text-dodgerblue">className</span> of the
+      <span class="text-dodgerblue">nav-link</span> so you can style them the
+      way you want.
+    </p>
+  </div>
+
+  <!-- Page 17 -->
+  <div>
+    <h1 class="text-dodgerblue font-saira text-docsH1">State 1</h1>
+    <p>
+      This state means that the current route is a child route of the
+      <span class="text-dodgerblue">nav-link</span> route. for example: the link
+      pathname = <span class="text-dodgerblue_95">/users</span> & the current
+      pathname = <span class="text-dodgerblue_95">/users/[id]</span> so the
+      <span class="text-dodgerblue">className</span> = "<span
+        class="text-dodgerblue_80"
+        >active</span
+      >"
+    </p>
+  </div>
+
+  <!-- Page 18 -->
+  <div>
+    <h1 class="text-dodgerblue font-saira text-docsH1">State 2</h1>
+    <p>
+      This state means that the current route is exact the same as the
+      <span class="text-dodgerblue">nav-link</span> route. for example: the link
+      pathname = <span class="text-dodgerblue_95">/users</span> & the current
+      pathname = <span class="text-dodgerblue_95">/users</span> so the
+      <span class="text-dodgerblue">className</span> = "<span
+        class="text-dodgerblue_80"
+        >active exact</span
+      >"
+    </p>
+  </div>
+
+  <!-- Page 19 -->
+  <div>
+    <h1 class="text-dodgerblue font-saira text-docsH1">State 3</h1>
+    <p>
+      This state means that the current route is completely different from the
+      <span class="text-dodgerblue">nav-link</span> route. for example: the link
+      pathname = <span class="text-dodgerblue_95">/posts</span> & the current
+      pathname = <span class="text-dodgerblue_95">/users</span> so the
+      <span class="text-dodgerblue">className</span> will be empty
+    </p>
+  </div>
+
+  <!-- Page 20 -->
+  <div>
+    <p>
+      Well, there's more to talk about but that was a simple explaination for
+      the
+      <span class="text-dodgerblue">Dummy Router</span> i hope it is useful to
+      you <i class="fa-solid fa-face-smile-beam text-dodgerblue"></i>.
+    </p>
+  </div>
+</div>

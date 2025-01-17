@@ -19,7 +19,8 @@
   background-color: light-dark(#ffffff, #242424);
 
   --prm-col: #1e90ff;
-  --sec-col: #1e90ff95;
+  --prm-col-95: #1e90ff95;
+  --prm-col-40: #1e90ff40;
   --trans: 300ms;
 
   scroll-behavior: smooth;
@@ -115,13 +116,12 @@ button {
   &:hover,
   &:focus,
   &:focus-visible {
-    background-color: var(--sec-col);
+    background-color: var(--prm-col-95);
   }
 }
 
 [data-link][data-nav] {
   user-select: none;
-  text-decoration: none;
   padding: 5px 15px;
   border-radius: 100px;
   background-color: light-dark(#ffffff, #222222);
@@ -129,7 +129,30 @@ button {
   font-weight: bolder;
 
   &.active {
-    background-color: var(--sec-col);
+    background-color: var(--prm-col-40);
+
+    &.exact {
+      background-color: var(--prm-col-95);
+    }
+  }
+}
+
+.pagination {
+  & > * {
+    counter-increment: page;
+    position: relative;
+    contain: layout;
+
+    &::before {
+      content: counter(page);
+      font-size: 1.5rem;
+      position: absolute;
+      z-index: -1;
+      top: 3px;
+      left: 10px;
+      font-family: saira;
+      color: var(--prm-col-95);
+    }
   }
 }
 

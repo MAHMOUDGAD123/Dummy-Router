@@ -25,7 +25,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </a-link>
   </header>
 
-  <nav class='h-nav max-_md:h-auto max-_md:rounded-[10px] max-_md:p-[10px] sticky top-0 rounded-full mx-auto mt-nav w-fit px-[30px] flex flex-wrap items-center justify-center gap-[10px] bg-header *:min-w-[80px]'>
+  <nav class='h-nav z-[1] max-_md:h-auto max-_md:rounded-[10px] max-_md:text-[0.75rem] max-_md:*:min-w-[45px] max-_md:p-[10px] sticky top-0 rounded-full mx-auto mt-nav w-fit px-[30px] flex flex-wrap items-center justify-center gap-[10px] bg-header *:min-w-[80px]'>
     <nav-link to="/">Home</nav-link>
     <nav-link to="/posts">Posts</nav-link>
     <nav-link to="/users">Users</nav-link>

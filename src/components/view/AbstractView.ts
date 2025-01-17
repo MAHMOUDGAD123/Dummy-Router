@@ -1,8 +1,9 @@
+import Router from "@/router/router";
 import { MAIN_ELEMENT_SELECTOR } from "@/utils/contants";
 
 export default class AbstractView implements View.AbstractViewType {
   canRenderLoadingState: boolean = true;
-  loadingStateRenderDelay: number = 10; // ms
+  loadingStateRenderDelay: number = 30; // ms
 
   constructor(title?: string) {
     if (title) this.setTitle(title);
@@ -50,5 +51,6 @@ export default class AbstractView implements View.AbstractViewType {
     if (canRender) {
       document.querySelector(`${MAIN_ELEMENT_SELECTOR}`)!.innerHTML = html;
     }
+    Router.postRender();
   }
 }

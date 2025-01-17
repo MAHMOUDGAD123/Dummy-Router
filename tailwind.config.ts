@@ -10,12 +10,25 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontSize: {
+        docsH1: "2rem",
+        docsH2: "1.5rem",
+        docsH3: "1.25rem",
+        docsH4: "1rem",
+        docstxt: "0.85rem",
+        docsArrow: "2rem",
+      },
       height: {
         header: `${HEADER_HEIGHT}px`,
         nav: `${NAV_HEIGHT}px`,
         top: `${HEADER_HEIGHT + NAV_HEIGHT}px`,
+        main: `calc(100vh - ${HEADER_HEIGHT + NAV_HEIGHT + NAV_MARGIN}px)`,
       },
       minHeight: {
+        main: `calc(100vh - ${HEADER_HEIGHT + NAV_HEIGHT + NAV_MARGIN}px)`,
+        top: `${HEADER_HEIGHT + NAV_HEIGHT}px`,
+      },
+      maxHeight: {
         main: `calc(100vh - ${HEADER_HEIGHT + NAV_HEIGHT + NAV_MARGIN}px)`,
         top: `${HEADER_HEIGHT + NAV_HEIGHT}px`,
       },
@@ -36,6 +49,12 @@ export default {
         _usm: "250px",
       },
       backgroundColor: {
+        dodgerblue: "#1e90ff",
+        dodgerblue_95: "#1e90ff95",
+        dodgerblue_80: "#1e90ff80",
+        dodgerblue_50: "#1e90ff50",
+        dodgerblue_30: "#1e90ff30",
+        dodgerblue_20: "#1e90ff20",
         header: ITEMS_BG,
         footer: ITEMS_BG,
         btn: BTN_BG,
@@ -44,6 +63,7 @@ export default {
         dodgerblue: "#1e90ff",
         dodgerblue_95: "#1e90ff95",
         dodgerblue_80: "#1e90ff80",
+        dodgerblue_50: "#1e90ff50",
         dodgerblue_30: "#1e90ff30",
         dodgerblue_20: "#1e90ff20",
         SecTextCol: "#777",

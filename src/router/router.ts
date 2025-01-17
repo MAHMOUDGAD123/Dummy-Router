@@ -1,4 +1,3 @@
-import NotFound from "@/components/view/NotFound";
 import PATH from "@/utils/path";
 
 export default class Router {
@@ -6,16 +5,18 @@ export default class Router {
   private static _current: Router.DummyRoute | null = null;
   private static _currentPath: string = "";
   private _routeMap: Map<string, Router.DummyRoute> | null = null;
+  private static __notFoundView: View.ViewConstructor | null = null;
 
-  constructor(routes: Router.Route[]) {
+  constructor(routes: Router.Routes) {
     // page load
     if (Router.__instance) return Router.__instance; // force singleton
-    this.buildRouteMap(routes);
+    const { data, notFound } = routes;
+    Router.__notFoundView = notFound;
+    this.buildRouteMap(data);
     const fixedLoc = PATH.fixPath(location.pathname);
     const matchedDummyRoute = this.matchPath(fixedLoc);
     this.historyReplace(fixedLoc); // to set the initial history state to avoid (null)
     this.updateCurrent(matchedDummyRoute, fixedLoc);
-    this.setActiveLinks();
     this.logger();
     Router.__instance = this; // set the singleton instance
   }
@@ -37,7 +38,7 @@ export default class Router {
       path: "",
       dummyPath: "",
       params: null,
-      view: NotFound,
+      view: Router.__notFoundView!,
       static: PATH.getStaticRoutes(path),
     };
   };
@@ -80,43 +81,11 @@ export default class Router {
     history.pushState({ path }, "", path);
   };
 
-  private matchLinkActiveStaticRoutes = (linkPath: string) => {
-    const linkStaticRoutes = PATH.getStaticRoutes(linkPath);
-    const currentStaticRoutes = Router.current.static;
-
-    if (!linkStaticRoutes || !currentStaticRoutes) {
-      if (Router.current.path === "/" && linkPath === "/") return true;
-      return false;
-    }
-
-    let A = currentStaticRoutes,
-      B = linkStaticRoutes;
-
-    if (A.length - B.length > 0) [A, B] = [B, A]; // swap
-
-    for (let i = 0, len = A.length; i < len; ++i)
-      if (A[i] !== B[i]) return false;
-    return true;
-  };
-
-  private setActiveLinks = async () => {
-    document.querySelectorAll("a[data-nav]").forEach((ele) => {
-      const link = ele as HTMLAnchorElement;
-      const linkPath = new URL(link.href).pathname;
-
-      if (this.matchLinkActiveStaticRoutes(linkPath)) {
-        link.classList.add("active");
-      } else {
-        link.classList.remove("active");
-      }
-    });
-  };
-
   private logger = async () => {
     if (import.meta.env.DEV) {
       console.clear();
       console.log("current:", Router.current);
-      console.log("current-path:", Router.currentPath);
+      // console.log("current-path:", Router.currentPath);
       // console.log("history-state:", Router.historyState);
       // console.log("routeMap:", this.routeMap);
     }
@@ -145,9 +114,8 @@ export default class Router {
 
       if (dummyPath !== Router.current.dummyPath) {
         const matchedDummyRoute = this.matchPath(path);
-        this.navigateTo(path, linkEle.getAttribute("replace") !== null);
+        this.navigateTo(path, linkEle.hasAttribute("replace"));
         this.updateCurrent(matchedDummyRoute, path);
-        this.setActiveLinks();
         this.logger();
       }
     }
@@ -157,7 +125,6 @@ export default class Router {
     const path = Router.historyState.path;
     const matchedDummyRoute = this.matchPath(path);
     this.updateCurrent(matchedDummyRoute, path);
-    this.setActiveLinks();
     this.logger();
   };
   // ===========================================================================================
@@ -188,6 +155,50 @@ export default class Router {
   public static get currentPath() {
     return Router._currentPath!;
   }
+
+  private static matchLinkActiveStaticRoutes = (linkPath: string) => {
+    const linkStaticRoutes = PATH.getStaticRoutes(linkPath);
+    const currentStaticRoutes = Router.current.static;
+
+    if (!linkStaticRoutes || !currentStaticRoutes) {
+      if (Router.current.path === "/" && linkPath === "/") return true;
+      return false;
+    }
+
+    let A = currentStaticRoutes,
+      B = linkStaticRoutes;
+
+    if (A.length - B.length > 0) [A, B] = [B, A]; // swap
+
+    for (let i = 0, len = A.length; i < len; ++i)
+      if (A[i] !== B[i]) return false;
+    return true;
+  };
+
+  private static setActiveLinks = async () => {
+    document.querySelectorAll("a[data-nav]").forEach((ele) => {
+      const link = ele as HTMLAnchorElement;
+      const linkPath = new URL(link.href).pathname;
+      const isTheSameRoute = linkPath === Router.currentPath;
+      const isActive = link.hasAttribute("strict-active")
+        ? isTheSameRoute
+        : this.matchLinkActiveStaticRoutes(linkPath);
+
+      if (isActive) {
+        link.classList.add("active");
+        isTheSameRoute
+          ? link.classList.add("exact")
+          : link.classList.remove("exact");
+      } else {
+        link.classList.remove("active", "exact");
+      }
+    });
+  };
+
+  /** this function called by the view after the render is done */
+  public static postRender = async () => {
+    Router.setActiveLinks();
+  };
 
   public static useParams = () => {
     return Router.getMatchedParams();
