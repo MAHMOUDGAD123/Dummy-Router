@@ -145,7 +145,7 @@ button {
 
     &::before {
       content: counter(page);
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       position: absolute;
       z-index: -1;
       top: 3px;

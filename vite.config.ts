@@ -15,6 +15,9 @@ export default defineConfig({
       minifyIdentifiers: true,
       minifySyntax: true,
       minifyWhitespace: true,
+      loader: {
+        ".html": "text",
+      },
     },
   },
   esbuild: {

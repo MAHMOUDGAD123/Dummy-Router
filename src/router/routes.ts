@@ -1,6 +1,6 @@
+import NotFound from "@/components/view/NotFound";
 import Docs from "@/components/view/Docs";
 import Home from "@/components/view/Home";
-import NotFound from "@/components/view/NotFound";
 import Post from "@/components/view/Post";
 import Posts from "@/components/view/Posts";
 import User from "@/components/view/User";

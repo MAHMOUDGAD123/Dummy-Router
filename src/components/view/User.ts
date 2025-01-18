@@ -1,5 +1,5 @@
 import { waitFor } from "@/utils/tools";
-import AbstractView from "./AbstractView";
+import AbstractView from "@/components/view/AbstractView";
 import Router from "@/router/router";
 import { FAKE_LOADING_MAX } from "@/utils/contants";
 
@@ -22,11 +22,13 @@ export default class extends AbstractView {
       )[+id - 1];
 
       // fake server await
-      await waitFor(FAKE_LOADING_MAX);
+      if (import.meta.env.DEV) {
+        await waitFor(FAKE_LOADING_MAX);
+      }
 
       return `
         <div class='flex flex-col p-[30px] gap-[20px] justify-center max-w-[600px] mx-auto my-[30px]'>
-          <div>
+          <div class='*:transition-colors'>
             <nav-link to="/users/[${id}]" strict-active class='border-[2px] border-solid border-dodgerblue'>info</nav-link>
             <nav-link to="/users/[${id}]/posts" strict-active class='border-[2px] border-solid border-dodgerblue'>posts</nav-link>
           </div>
@@ -37,7 +39,7 @@ export default class extends AbstractView {
             <i class="fa-solid fa-circle-user text-dodgerblue text-[4.5rem]"></i>
           </div>
 
-          <h1 class='text-dodgerblue font-saira w-fit mx-auto text-docsH1 max-_md:text-docsH2 font-extrabold'>${userData.username}</h1>
+          <h1 class='text-dodgerblue font-saira w-fit mx-auto text-[2.5rem] max-_md:text-[1.5rem] font-extrabold'>${userData.username}</h1>
           
           <div class='flex flex-col gap-[20px] text-start *:break-words'>
             <p class='opacity-85 bg-dodgerblue_30 p-[20px] rounded-2xl'><span class='text-dodgerblue font-extrabold'>Name:</span> ${userData.name}</p>

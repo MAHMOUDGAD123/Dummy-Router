@@ -7,7 +7,7 @@ const ITEMS_BG = "light-dark(#e5e5e5,#333333)";
 const BTN_BG = "light-dark(#ffffff,#111111)";
 
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./index.html", "./src/**/*.{js,ts,html}"],
   theme: {
     extend: {
       fontSize: {

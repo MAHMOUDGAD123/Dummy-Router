@@ -1,4 +1,4 @@
-import AbstractView from "./AbstractView";
+import AbstractView from "@/components/view/AbstractView";
 
 export default class extends AbstractView {
   constructor() {
@@ -22,10 +22,14 @@ export default class extends AbstractView {
 
       <p class='opacity-70 margin max-w-[400px] text-[0.85rem] font-bold mb-[20px]'>
         <i class="fa-solid fa-triangle-exclamation"></i>
-        This Router was built in a couple of days so don't
-        use it in production directly first you need to test it, customize it, 
+        This Router was built in a couple of days and it needs a lot of optimization.
+        So don't use it in production directly first you need to test it, customize it, 
         do what ever you want before using it, or don't use it at all.
       </p>
+
+      <a href='https://github.com/MAHMOUDGAD123/Dummy-Router' target='_blank'>
+        <i class="fa-brands fa-github hover:text-dodgerblue text-[2rem] transition-colors duration-300"></i>
+      </a>
 
       <a-link to="/docs" class='w-fit [&:hover_i]:animate-pulse'>
         <button>

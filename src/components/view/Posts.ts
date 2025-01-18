@@ -1,5 +1,5 @@
 import { waitFor } from "@/utils/tools";
-import AbstractView from "./AbstractView";
+import AbstractView from "@/components/view/AbstractView";
 import { FAKE_LOADING_MAX } from "@/utils/contants";
 
 export default class extends AbstractView {
@@ -14,7 +14,9 @@ export default class extends AbstractView {
       )) as Info.PostInfoType[];
 
       // fake server await
-      await waitFor(FAKE_LOADING_MAX);
+      if (import.meta.env.DEV) {
+        await waitFor(FAKE_LOADING_MAX);
+      }
 
       return `
         <div class='flex flex-wrap *:[flex-basis:200px] max-_lg:*:[flex-basis:350px] p-[30px] gap-[20px] justify-center'>

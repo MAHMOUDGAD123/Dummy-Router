@@ -4,12 +4,10 @@ import "@/components/link/NavLink";
 import "@/components/link/Link";
 import "@/router";
 import routerLogo from "/router.svg";
-import { MAIN_ELEMENT_SELECTOR } from "@/utils/contants";
 
 // this is the page layout.
-// (main) element is the default element that the router will use
-// to render the views you can change it to whatever you want
-// by changing the name of the (MAIN_ELEMENT_SELECTOR) in the (src/utils/contants) file
+// (main) element is the default element that the AbstractView will use to render the views
+// unless you provide a (renderTarget) during the render phase
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <header class='w-full h-header flex p-[15px] items-center justify-center'>
     <a-link to="/" class="logo">
@@ -32,7 +30,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <nav-link to="/docs">Docs</nav-link>
   </nav>
 
-  <${MAIN_ELEMENT_SELECTOR} class='min-h-main p-[10px]'></${MAIN_ELEMENT_SELECTOR}>
+  <main class='min-h-main p-[10px]'></main>
 
   <footer class='flex items-center justify-center gap-[10px] font-saira py-[7px] bg-footer'>
     <span class='font-bold'>Powered by</span>

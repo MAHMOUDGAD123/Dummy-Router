@@ -6,7 +6,8 @@ declare namespace View {
     error(error: Error): Promise<string>;
     loading(currentPath: string): Promise<void>;
     canRenderLoadingState: boolean;
-    loadingStateRenderDelay: number; // ms
+    readonly loadingStateRenderDelay: number; // ms
+    readonly renderElementSelector: string;
   }
 
   type ViewConstructor = new () => AbstractViewType;

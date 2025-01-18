@@ -1,5 +1,5 @@
 import { waitFor } from "@/utils/tools";
-import AbstractView from "./AbstractView";
+import AbstractView from "@/components/view/AbstractView";
 import Router from "@/router/router";
 import { FAKE_LOADING_MAX } from "@/utils/contants";
 
@@ -23,7 +23,9 @@ export default class extends AbstractView {
       >);
 
       // fake server await
-      await waitFor(FAKE_LOADING_MAX);
+      if (import.meta.env.DEV) {
+        await waitFor(FAKE_LOADING_MAX);
+      }
 
       return `
         <div class='flex flex-col p-[30px] gap-[20px] justify-center max-w-[600px] mx-auto my-[30px]'>
@@ -31,13 +33,17 @@ export default class extends AbstractView {
             <nav-link to="/users/[${id}]" strict-active class='border-[2px] border-solid border-dodgerblue'>info</nav-link>
             <nav-link to="/users/[${id}]/posts" strict-active class='border-[2px] border-solid border-dodgerblue'>posts</nav-link>
           </div>
+
           <span class='text-[5rem] font-saira opacity-30'>#${userData.id}</span>
+
           <div class='w-[100px] aspect-square flex font-saira justify-center items-center rounded-full bg-dodgerblue_30 mx-auto border-[7px] border-solid border-dodgerblue'>
             <i class="fa-solid fa-circle-user text-dodgerblue text-[4.5rem]"></i>
           </div>
-          <h1 class='text-dodgerblue font-saira w-fit mx-auto text-[2.5rem] font-extrabold'>${
+
+          <h1 class='text-dodgerblue font-saira w-fit mx-auto text-[2.5rem] max-_md:text-[1.5rem] font-extrabold'>${
             userData.username
           } Posts</h1>
+          
           <div class='flex flex-wrap *:[flex-basis:200px] max-_lg:*:[flex-basis:350px] p-[30px] gap-[20px] justify-center'>
           ${postsData
             .filter((post) => post.userId === +id)

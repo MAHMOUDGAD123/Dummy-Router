@@ -1,9 +1,9 @@
 import Router from "@/router/router";
-import { MAIN_ELEMENT_SELECTOR } from "@/utils/contants";
 
 export default class AbstractView implements View.AbstractViewType {
   canRenderLoadingState: boolean = true;
-  loadingStateRenderDelay: number = 30; // ms
+  readonly loadingStateRenderDelay: number = 50; // ms
+  readonly renderElementSelector: string = "main";
 
   constructor(title?: string) {
     if (title) this.setTitle(title);
@@ -21,7 +21,7 @@ export default class AbstractView implements View.AbstractViewType {
     setTimeout(() => {
       if (!this.canRenderLoadingState || currentPath !== location.pathname)
         return;
-      document.querySelector(`${MAIN_ELEMENT_SELECTOR}`)!.innerHTML = `
+      document.querySelector(this.renderElementSelector)!.innerHTML = `
         <div class='w-full mt-[120px] flex items-center justify-center'>
           <div class='w-[50px] aspect-square border-[5px] border-solid border-x-dodgerblue border-y-transparent rounded-full animate-spin'></div>
         </div>
@@ -46,11 +46,11 @@ export default class AbstractView implements View.AbstractViewType {
   async render(currentPath: string) {
     this.loading(currentPath); // show loader until data load
     const html = await this.getHTML();
-    this.canRenderLoadingState = false; // prevent loading state
+    this.canRenderLoadingState = false; // prevent loading state render
     const canRender = currentPath === location.pathname;
     if (canRender) {
-      document.querySelector(`${MAIN_ELEMENT_SELECTOR}`)!.innerHTML = html;
+      document.querySelector(this.renderElementSelector)!.innerHTML = html;
+      Router.postRender();
     }
-    Router.postRender();
   }
 }
