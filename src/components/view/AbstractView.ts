@@ -2,7 +2,7 @@ import Router from "@/router/router";
 
 export default class AbstractView implements View.AbstractViewType {
   canRenderLoadingState: boolean = true;
-  readonly loadingStateRenderDelay: number = 50; // ms
+  readonly loadingStateRenderDelay: number = 100; // ms
   readonly renderElementSelector: string = "main";
 
   constructor(title?: string) {
