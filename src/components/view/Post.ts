@@ -12,9 +12,14 @@ export default class extends AbstractView {
 
   public async getHTML() {
     try {
-      const { id } = this.params;
+      const postId = +this.params.id;
+      if (postId < 1 || postId > 100) {
+        throw new Error(
+          `postId of ${postId} is invalid - posts are in the range of 1->100.`
+        );
+      }
       const postData = (await Router.dummyFetch(
-        `https://jsonplaceholder.typicode.com/posts/${id}`
+        `https://jsonplaceholder.typicode.com/posts/${postId}`
       )) as Info.PostInfoType;
 
       return `

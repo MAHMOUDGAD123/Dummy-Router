@@ -12,16 +12,21 @@ export default class extends AbstractView {
 
   public async getHTML() {
     try {
-      const { id } = this.params;
+      const userId = +this.params.id;
+      if (userId < 1 || userId > 10) {
+        throw new Error(
+          `userId of ${userId} is invalid - users are in the range of 1->10.`
+        );
+      }
       const userData = (await Router.dummyFetch(
-        `https://jsonplaceholder.typicode.com/users/${id}`
+        `https://jsonplaceholder.typicode.com/users/${userId}`
       )) as Info.UserInfoType;
 
       return `
         <div class='flex flex-col p-[30px] gap-[20px] justify-center max-w-[600px] mx-auto my-[30px]'>
           <div class='*:transition-colors'>
-            <nav-link to="/users/[${id}]" strict-active class='border-[2px] border-solid border-dodgerblue'>info</nav-link>
-            <nav-link to="/users/[${id}]/posts" strict-active class='border-[2px] border-solid border-dodgerblue'>posts</nav-link>
+            <nav-link to="/users/[${userId}]" strict-active class='border-[2px] border-solid border-dodgerblue'>info</nav-link>
+            <nav-link to="/users/[${userId}]/posts" strict-active class='border-[2px] border-solid border-dodgerblue'>posts</nav-link>
           </div>
 
           <span class='text-[5rem] font-saira opacity-30'>#${userData.id}</span>

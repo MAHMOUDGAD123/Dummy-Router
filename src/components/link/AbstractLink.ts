@@ -13,7 +13,7 @@ export default class AbstractLink extends HTMLElement {
       this.type === "nav-link"
         ? `data-link='${ID}' data-nav`
         : `data-link='${ID}'`;
-    this.outerHTML = `<a href='${href}' ${replace} ${strictActive} ${linkData}></a>`;
+    this.outerHTML = `<a href='${href}' ${replace} ${linkData} ${strictActive}></a>`;
     const linkEle = parent.querySelector(
       `[data-link='${ID}']`
     )! as HTMLAnchorElement;

@@ -12,11 +12,19 @@ export default class extends AbstractView {
 
   public async getHTML() {
     try {
-      const { id } = this.params;
+      const userId = +this.params.id;
+      if (userId < 1 || userId > 10) {
+        throw new Error(
+          `userId of ${userId} is invalid - max users count is 10.`
+        );
+      }
       const [userData, postsData] = await (Promise.all([
-        Router.dummyFetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
-          cacheTarget: `/users/[${id}]`,
-        }),
+        Router.dummyFetch(
+          `https://jsonplaceholder.typicode.com/users/${userId}`,
+          {
+            cacheTarget: `/users/[${userId}]`,
+          }
+        ),
         Router.dummyFetch("https://jsonplaceholder.typicode.com/posts", {
           cacheTarget: "/posts",
         }),
@@ -27,8 +35,8 @@ export default class extends AbstractView {
       return `
         <div class='flex flex-col p-[30px] gap-[20px] justify-center max-w-[600px] mx-auto my-[30px]'>
           <div>
-            <nav-link to="/users/[${id}]" strict-active class='border-[2px] border-solid border-dodgerblue'>info</nav-link>
-            <nav-link to="/users/[${id}]/posts" strict-active class='border-[2px] border-solid border-dodgerblue'>posts</nav-link>
+            <nav-link to="/users/[${userId}]" strict-active class='border-[2px] border-solid border-dodgerblue'>info</nav-link>
+            <nav-link to="/users/[${userId}]/posts" strict-active class='border-[2px] border-solid border-dodgerblue'>posts</nav-link>
           </div>
 
           <span class='text-[5rem] font-saira opacity-30'>#${userData.id}</span>
@@ -43,12 +51,12 @@ export default class extends AbstractView {
           
           <div class='flex flex-wrap *:[flex-basis:200px] max-_lg:*:[flex-basis:350px] p-[30px] gap-[20px] justify-center'>
           ${postsData
-            .filter((post) => post.userId === +id)
+            .filter((post) => post.userId === userId)
             .map(
-              (postData, i) => `
-                  <a-link to="/posts/[${
-                    postData.id
-                  }]" class='p-[20px] font-extrabold text-[1.25rem] rounded-3xl bg-dodgerblue_80 hover:bg-dodgerblue text-ellipsis overflow-hidden whitespace-nowrap'>
+              (_, i) => `
+                  <a-link to="/users/[${userId}]/posts/[${
+                i + 1
+              }]" class='p-[20px] font-extrabold text-[1.25rem] rounded-3xl bg-dodgerblue_80 hover:bg-dodgerblue text-ellipsis overflow-hidden whitespace-nowrap'>
                     Post ${i + 1}
                   </a-link>
               `

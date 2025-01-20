@@ -6,6 +6,7 @@ import Posts from "@/components/view/Posts";
 import User from "@/components/view/User";
 import UserPosts from "@/components/view/UserPosts";
 import Users from "@/components/view/Users";
+import UserPost from "@/components/view/UserPost";
 
 const ROUTES: Router.Routes = {
   data: [
@@ -38,6 +39,11 @@ const ROUTES: Router.Routes = {
       path: "/users/[id]/posts",
       view: UserPosts,
       name: "User Posts",
+    },
+    {
+      path: "/users/[userId]/posts/[postId]",
+      view: UserPost,
+      name: "User Post",
     },
     {
       path: "/docs",

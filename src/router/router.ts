@@ -6,12 +6,28 @@ export default class Router {
   private static _currentPath: string = "";
   private _routeMap: Map<string, Router.DummyRoute> | null = null;
   private static __notFoundView: View.ViewConstructor | null = null;
-  private static _dummyCache: Map<string, { data: any; timeout: number }> =
-    new Map();
+  private static _dummyCache: Map<string, Router.CacheInfo> | null = null;
+  private static _dummyCacheMaxAge: number = 0; // 15 minutes
+  private static _cacheEnebled: boolean = !1;
 
-  constructor(routes: Router.Routes) {
-    // page load
+  constructor(routes: Router.Routes, config?: Router.Config) {
     if (Router.__instance) return Router.__instance; // force singleton
+
+    // config
+    // --------------------------------------------------
+    const { cache, cacheMaxAge } = {
+      cache: config?.cache ?? !0,
+      cacheMaxAge: config?.cacheMaxAge ?? 900000,
+    } as Router.Config;
+
+    if (cache) {
+      Router._dummyCache = new Map();
+      Router._cacheEnebled = true;
+      Router._dummyCacheMaxAge = cacheMaxAge!;
+    }
+    // --------------------------------------------------
+
+    // on page load initialization
     const { data, notFound } = routes;
     Router.__notFoundView = notFound;
     this.buildRouteMap(data);
@@ -19,8 +35,11 @@ export default class Router {
     const matchedDummyRoute = this.matchPath(fixedLoc);
     this.historyReplace(fixedLoc); // to set the initial history state to avoid (null)
     this.updateCurrent(matchedDummyRoute, fixedLoc);
-    this.logger();
     Router.__instance = this; // set the singleton instance
+    Router.clearDummyCacheInterval();
+    if (import.meta.env.DEV) {
+      this.logger();
+    }
   }
 
   // PRIVATES
@@ -51,6 +70,7 @@ export default class Router {
   ) => {
     Router._current = dummyRoute ?? this.dummyNotFoundRoute(path);
     Router._currentPath = path;
+    Router.preRender();
     new Router.current.view().render(path);
   };
 
@@ -86,7 +106,7 @@ export default class Router {
   private logger = async () => {
     setTimeout(() => {
       console.clear();
-      // console.log("current:", Router.current);
+      console.log("current:", Router.current);
       // console.log("current-path:", Router.currentPath);
       console.log("cache:", Router._dummyCache);
       // console.log("history-state:", Router.historyState);
@@ -119,7 +139,9 @@ export default class Router {
         const matchedDummyRoute = this.matchPath(path);
         this.navigateTo(path, linkEle.hasAttribute("replace"));
         this.updateCurrent(matchedDummyRoute, path);
-        this.logger();
+        if (import.meta.env.DEV) {
+          this.logger();
+        }
       }
     }
   };
@@ -128,7 +150,9 @@ export default class Router {
     const path = Router.historyState.path;
     const matchedDummyRoute = this.matchPath(path);
     this.updateCurrent(matchedDummyRoute, path);
-    this.logger();
+    if (import.meta.env.DEV) {
+      this.logger();
+    }
   };
   // ===========================================================================================
 
@@ -202,6 +226,11 @@ export default class Router {
     url: string | URL | Request,
     options?: Router.DummyFetchOptions
   ) => {
+    // just fetch the data if router cache is disabled
+    if (!Router._cacheEnebled) {
+      return await fetch(url).then((res) => res.json());
+    }
+
     const { cachable, cacheTarget, cacheTimeout } = {
       cachable: options?.cachable ?? true,
       cacheTarget: options?.cacheTarget ?? Router.currentPath,
@@ -210,7 +239,7 @@ export default class Router {
 
     if (cachable) {
       // get the cached data
-      const cacheInfo = this._dummyCache.get(cacheTarget!);
+      const cacheInfo = this._dummyCache!.get(cacheTarget!);
       if (cacheInfo) {
         const cachedValue = cacheInfo.data;
         const isAlive = Date.now() < cacheInfo.timeout;
@@ -220,7 +249,7 @@ export default class Router {
     const data = await fetch(url).then((res) => res.json());
     if (cachable) {
       // save data in dummyCache
-      Router._dummyCache.set(cacheTarget!, {
+      Router._dummyCache!.set(cacheTarget!, {
         data,
         timeout: Date.now() + cacheTimeout!,
       });
@@ -228,8 +257,23 @@ export default class Router {
     return data;
   };
 
+  public static clearDummyCacheInterval = async () => {
+    // this function will set the clear cache interval
+    // only if the router cache is enabled
+    if (!Router._cacheEnebled) return;
+    setInterval(() => {
+      Router._dummyCache!.clear();
+      // setTimeout(console.log, 50, "DummyCache killed 💀");
+    }, Router._dummyCacheMaxAge);
+  };
+
   /** this function called by the view after the render is done */
   public static postRender = async () => {
+    Router.setActiveLinks();
+  };
+
+  /** this function called by the view before the render */
+  public static preRender = async () => {
     Router.setActiveLinks();
   };
 

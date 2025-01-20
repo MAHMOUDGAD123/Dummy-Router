@@ -1,0 +1,50 @@
+import AbstractView from "@/components/view/AbstractView";
+import Router from "@/router/router";
+
+export default class extends AbstractView {
+  private params = Router.useParams() as { userId: string; postId: string };
+  private title: string = `Post - ${this.params.userId}|${this.params.postId}`;
+
+  constructor() {
+    super();
+    this.setTitle(this.title);
+  }
+
+  public async getHTML() {
+    try {
+      const userId = +this.params.userId;
+      const postId = +this.params.postId;
+      if (postId < 1 || postId > 10) {
+        throw new Error(
+          `postId of ${postId} is invalid - any user has 1->10 posts.`
+        );
+      }
+      if (userId < 1 || userId > 10) {
+        throw new Error(
+          `userId of ${userId} is invalid - max users count is 10.`
+        );
+      }
+      const actualPostId = (userId - 1) * 10 + postId;
+      const postData = (await Router.dummyFetch(
+        `https://jsonplaceholder.typicode.com/posts/${actualPostId}`,
+        {
+          cacheTarget: `/posts/[${actualPostId}]`,
+        }
+      )) as Info.PostInfoType;
+
+      return `
+        <div class='flex flex-col p-[30px] gap-[20px] justify-center max-w-[600px] mx-auto my-[30px]'>
+          <div class='mb-[50px]'>
+            <nav-link to="/users/[${userId}]" strict-active class='border-[2px] border-solid border-dodgerblue'>info</nav-link>
+            <nav-link to="/users/[${userId}]/posts" class='border-[2px] border-solid border-dodgerblue'>posts</nav-link>
+          </div>
+
+          <div class='w-fit aspect-square p-[15px] flex font-saira text-[2.5rem] justify-center items-center rounded-full bg-dodgerblue_30 mx-auto border-[5px] border-solid border-dodgerblue'>${postData.id}</div>
+          <h1 class='text-dodgerblue w-fit mx-auto text-[1.5rem] font-extrabold'>${postData.title}</h1>
+          <p class='opacity-85 bg-dodgerblue_30 p-[20px] rounded-2xl'>${postData.body}</p>
+        </div>`;
+    } catch (err) {
+      return await this.error(err as Error);
+    }
+  }
+}

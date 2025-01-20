@@ -34,11 +34,7 @@ export default class AbstractView implements View.AbstractViewType {
       <div class='flex flex-col gap-[15px] my-[70px]'>
         <i class="fa-solid fa-face-frown text-[5rem]"></i>
         <h1 class='text-[1.75rem] font-extrabold font-saira'>Sad Dummy</h1>
-        ${
-          import.meta.env.DEV // vite env
-            ? `<p>${err.message}</p>`
-            : "<p>Sorry, somthing went wrong</p>"
-        }
+        <p>${err.message}</p>
       </div>
     `;
   }

@@ -31,6 +31,23 @@ declare namespace Router {
     path: string;
   };
 
+  type Config = {
+    /**
+     * - enable fetch caching or not
+     * - if falsy router will use dummy caching
+     * - enabled by default
+     * @default true
+     */
+    cache?: boolean;
+
+    /**
+     * - this value is for the clear cache store (setInterval)
+     * - the router use it as a (timeout) for the (setInterval)
+     * @default 900000 ms (15 minutes)
+     */
+    cacheMaxAge?: number;
+  };
+
   type DummyFetchOptions = {
     /**
      * - used to cache this route or not
@@ -50,4 +67,6 @@ declare namespace Router {
      */
     cacheTimeout?: number;
   };
+
+  type CacheInfo = { data: any; timeout: number };
 }
