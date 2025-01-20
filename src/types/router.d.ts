@@ -43,7 +43,7 @@ declare namespace Router {
     /**
      * - this value is for the clear cache store (setInterval)
      * - the router use it as a (timeout) for the (setInterval)
-     * @default 900000 ms (15 minutes)
+     * @default 600000 ms (10 minutes)
      */
     cacheMaxAge?: number;
   };
@@ -62,8 +62,9 @@ declare namespace Router {
      */
     cacheTarget?: string;
     /**
-     * the cache timeout im ms (default is 5 minutes)
-     * @default 300000 ms
+     * - the cache timeout im ms
+     * - default is 3 minutes
+     * @default 180000 ms
      */
     cacheTimeout?: number;
   };

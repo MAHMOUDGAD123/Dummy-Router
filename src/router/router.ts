@@ -17,7 +17,7 @@ export default class Router {
     // --------------------------------------------------
     const { cache, cacheMaxAge } = {
       cache: config?.cache ?? !0,
-      cacheMaxAge: config?.cacheMaxAge ?? 900000,
+      cacheMaxAge: config?.cacheMaxAge ?? 600000,
     } as Router.Config;
 
     if (cache) {
@@ -234,7 +234,7 @@ export default class Router {
     const { cachable, cacheTarget, cacheTimeout } = {
       cachable: options?.cachable ?? true,
       cacheTarget: options?.cacheTarget ?? Router.currentPath,
-      cacheTimeout: options?.cacheTimeout ?? 300000,
+      cacheTimeout: options?.cacheTimeout ?? 180000,
     } as Router.DummyFetchOptions;
 
     if (cachable) {
