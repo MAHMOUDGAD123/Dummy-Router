@@ -1,7 +1,5 @@
-import { waitFor } from "@/utils/tools";
 import AbstractView from "@/components/view/AbstractView";
 import Router from "@/router/router";
-import { FAKE_LOADING_MAX } from "@/utils/contants";
 
 export default class extends AbstractView {
   private params = Router.useParams() as { id: string };
@@ -16,16 +14,15 @@ export default class extends AbstractView {
     try {
       const { id } = this.params;
       const [userData, postsData] = await (Promise.all([
-        fetch("/db/users.json").then((res) => res.json()),
-        fetch("/db/posts.json").then((res) => res.json()),
-      ]).then((values) => [values[0][+id - 1], values[1]]) as Promise<
+        Router.dummyFetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
+          cacheTarget: `/users/[${id}]`,
+        }),
+        Router.dummyFetch("https://jsonplaceholder.typicode.com/posts", {
+          cacheTarget: "/posts",
+        }),
+      ]).then((values) => [values[0], values[1]]) as Promise<
         [Info.UserInfoType, Info.PostInfoType[]]
       >);
-
-      // fake server await
-      if (import.meta.env.DEV) {
-        await waitFor(FAKE_LOADING_MAX);
-      }
 
       return `
         <div class='flex flex-col p-[30px] gap-[20px] justify-center max-w-[600px] mx-auto my-[30px]'>

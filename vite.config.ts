@@ -1,6 +1,31 @@
 import path from "path";
-import { defineConfig, type UserConfig } from "vite";
+import { defineConfig, type UserConfig, type Plugin } from "vite";
 import { ViteMinifyPlugin } from "vite-plugin-minify";
+
+export const removeConsolePlugin = (): Plugin => ({
+  name: "vite-plugin-remove-console", // Plugin name
+  enforce: "pre", // Run this before other plugins
+  transform(code, id) {
+    // only on PROD
+    if (process.env.NODE_ENV !== "production") {
+      return null;
+    }
+
+    // Only transform JavaScript/TypeScript files
+    if (/\.(?:js|ts)$/.test(id)) {
+      // Remove console.log statements
+      const transformedCode = code.replace(
+        /console\.(?:log|debug|info|warn|error)\((?:.*)\);?/g,
+        ""
+      );
+      return {
+        code: transformedCode,
+        map: null, // Let Vite handle source maps
+      };
+    }
+    return null; // Return null for non-JS/TS files
+  },
+});
 
 export default defineConfig({
   base: "./",
@@ -33,5 +58,5 @@ export default defineConfig({
   server: {
     hmr: true,
   },
-  plugins: [ViteMinifyPlugin()],
+  plugins: [ViteMinifyPlugin(), removeConsolePlugin()],
 } satisfies UserConfig);

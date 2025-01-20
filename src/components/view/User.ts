@@ -1,7 +1,5 @@
-import { waitFor } from "@/utils/tools";
 import AbstractView from "@/components/view/AbstractView";
 import Router from "@/router/router";
-import { FAKE_LOADING_MAX } from "@/utils/contants";
 
 export default class extends AbstractView {
   private params = Router.useParams() as { id: string };
@@ -15,16 +13,9 @@ export default class extends AbstractView {
   public async getHTML() {
     try {
       const { id } = this.params;
-      const userData = (
-        (await fetch("/db/users.json").then((res) =>
-          res.json()
-        )) as Info.UserInfoType[]
-      )[+id - 1];
-
-      // fake server await
-      if (import.meta.env.DEV) {
-        await waitFor(FAKE_LOADING_MAX);
-      }
+      const userData = (await Router.dummyFetch(
+        `https://jsonplaceholder.typicode.com/users/${id}`
+      )) as Info.UserInfoType;
 
       return `
         <div class='flex flex-col p-[30px] gap-[20px] justify-center max-w-[600px] mx-auto my-[30px]'>

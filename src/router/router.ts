@@ -6,6 +6,8 @@ export default class Router {
   private static _currentPath: string = "";
   private _routeMap: Map<string, Router.DummyRoute> | null = null;
   private static __notFoundView: View.ViewConstructor | null = null;
+  private static _dummyCache: Map<string, { data: any; timeout: number }> =
+    new Map();
 
   constructor(routes: Router.Routes) {
     // page load
@@ -82,13 +84,14 @@ export default class Router {
   };
 
   private logger = async () => {
-    if (import.meta.env.DEV) {
+    setTimeout(() => {
       console.clear();
-      console.log("current:", Router.current);
+      // console.log("current:", Router.current);
       // console.log("current-path:", Router.currentPath);
+      console.log("cache:", Router._dummyCache);
       // console.log("history-state:", Router.historyState);
       // console.log("routeMap:", this.routeMap);
-    }
+    }, 0);
   };
   // ===========================================================================================
 
@@ -193,6 +196,36 @@ export default class Router {
         link.classList.remove("active", "exact");
       }
     });
+  };
+
+  public static dummyFetch = async (
+    url: string | URL | Request,
+    options?: Router.DummyFetchOptions
+  ) => {
+    const { cachable, cacheTarget, cacheTimeout } = {
+      cachable: options?.cachable ?? true,
+      cacheTarget: options?.cacheTarget ?? Router.currentPath,
+      cacheTimeout: options?.cacheTimeout ?? 300000,
+    } as Router.DummyFetchOptions;
+
+    if (cachable) {
+      // get the cached data
+      const cacheInfo = this._dummyCache.get(cacheTarget!);
+      if (cacheInfo) {
+        const cachedValue = cacheInfo.data;
+        const isAlive = Date.now() < cacheInfo.timeout;
+        if (cachedValue && isAlive) return cachedValue;
+      }
+    }
+    const data = await fetch(url).then((res) => res.json());
+    if (cachable) {
+      // save data in dummyCache
+      Router._dummyCache.set(cacheTarget!, {
+        data,
+        timeout: Date.now() + cacheTimeout!,
+      });
+    }
+    return data;
   };
 
   /** this function called by the view after the render is done */
