@@ -7,23 +7,26 @@ export default class Router {
   private _routeMap: Map<string, Router.DummyRoute> | null = null;
   private static __notFoundView: View.ViewConstructor | null = null;
   private static _dummyCache: Map<string, Router.CacheInfo> | null = null;
-  private static _dummyCacheMaxAge: number = 0; // 15 minutes
-  private static _cacheEnebled: boolean = !1;
+  private static _dummyCacheMaxAge: number = 0;
+  private static _dummyCacheEnebled: boolean = !1;
+  private static _immortalDummyCache: boolean = !1;
 
   constructor(routes: Router.Routes, config?: Router.Config) {
     if (Router.__instance) return Router.__instance; // force singleton
 
     // config
     // --------------------------------------------------
-    const { cache, cacheMaxAge } = {
+    const { cache, cacheMaxAge, immortalCache } = {
       cache: config?.cache ?? !0,
       cacheMaxAge: config?.cacheMaxAge ?? 600000,
+      immortalCache: config?.immortalCache ?? false,
     } as Router.Config;
 
     if (cache) {
       Router._dummyCache = new Map();
-      Router._cacheEnebled = true;
+      Router._dummyCacheEnebled = true;
       Router._dummyCacheMaxAge = cacheMaxAge!;
+      Router._immortalDummyCache = immortalCache!;
     }
     // --------------------------------------------------
 
@@ -227,7 +230,7 @@ export default class Router {
     options?: Router.DummyFetchOptions
   ) => {
     // just fetch the data if router cache is disabled
-    if (!Router._cacheEnebled) {
+    if (!Router._dummyCacheEnebled) {
       return await fetch(url).then((res) => res.json());
     }
 
@@ -260,7 +263,7 @@ export default class Router {
   public static clearDummyCacheInterval = async () => {
     // this function will set the clear cache interval
     // only if the router cache is enabled
-    if (!Router._cacheEnebled) return;
+    if (!Router._dummyCacheEnebled || Router._immortalDummyCache) return;
     setInterval(() => {
       Router._dummyCache!.clear();
       // setTimeout(console.log, 50, "DummyCache killed 💀");

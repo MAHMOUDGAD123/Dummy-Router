@@ -33,8 +33,8 @@ declare namespace Router {
 
   type Config = {
     /**
-     * - enable fetch caching or not
-     * - if falsy router will use dummy caching
+     * - enable dummy fetch caching or not
+     * - if falsy router won't use fetch caching
      * - enabled by default
      * @default true
      */
@@ -46,6 +46,13 @@ declare namespace Router {
      * @default 600000 ms (10 minutes)
      */
     cacheMaxAge?: number;
+
+    /**
+     * - if true the clear cache (setInterval) won't be set
+     * - the cache isn't immortal by default
+     * @default false
+     */
+    immortalCache?: boolean;
   };
 
   type DummyFetchOptions = {
