@@ -15,7 +15,7 @@ export const removeConsolePlugin = (): Plugin => ({
     if (/\.(?:js|ts)$/.test(id)) {
       // Remove console.log statements
       const transformedCode = code.replace(
-        /console\.(?:log|debug|info|warn|error)\((?:.*)\);?/g,
+        /console\.(?:log|debug|info|warn|error|clear)\((?:.*)\);?/g,
         ""
       );
       return {
