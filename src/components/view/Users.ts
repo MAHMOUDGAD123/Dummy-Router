@@ -2,8 +2,11 @@ import AbstractView from "@/components/view/AbstractView";
 import Router from "@/router/router";
 
 export default class extends AbstractView {
+  readonly title: string = "Users";
+
   constructor() {
-    super("Users");
+    super();
+    this.setTitle();
   }
 
   public async getHTML() {

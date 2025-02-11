@@ -2,8 +2,11 @@ import AbstractView from "@/components/view/AbstractView";
 import template from "./template.html?raw";
 
 export default class extends AbstractView {
+  readonly title: string = "Docs";
+
   constructor() {
-    super("Docs");
+    super();
+    this.setTitle();
   }
 
   public async getHTML() {

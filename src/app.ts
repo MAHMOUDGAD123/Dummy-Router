@@ -1,7 +1,6 @@
 import "@/styles/_index.css";
 import "@/styles/fa/css/all.min.css";
-import "@/components/link/NavLink";
-import "@/components/link/Link";
+import "@/components/link";
 import "@/router";
 import routerLogo from "/router.svg";
 
@@ -30,7 +29,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <nav-link to="/docs">Docs</nav-link>
   </nav>
 
-  <main class='min-h-main p-[10px]'></main>
+  <main id="__main__" class='min-h-main p-[10px]'></main>
 
   <footer class='flex items-center justify-center gap-[10px] font-saira py-[7px] bg-footer'>
     <span class='font-bold'>Powered by</span>

@@ -29,6 +29,7 @@ declare namespace Router {
 
   type HistoryState = {
     path: string;
+    renderTargetId: string | null;
   };
 
   type Config = {

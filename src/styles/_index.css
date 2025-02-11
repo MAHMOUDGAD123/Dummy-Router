@@ -21,6 +21,7 @@
   --prm-col: #1e90ff;
   --prm-col-95: #1e90ff95;
   --prm-col-40: #1e90ff40;
+  --prm-col-30: #1e90ff40;
   --trans: 300ms;
 
   scroll-behavior: smooth;
@@ -129,7 +130,7 @@ button {
   font-weight: bolder;
 
   &.active {
-    background-color: var(--prm-col-40);
+    background-color: var(--prm-col-30);
 
     &.exact {
       background-color: var(--prm-col-95);

@@ -31,12 +31,12 @@ const ROUTES: Router.Routes = {
       name: "Users",
     },
     {
-      path: "/users/[id]",
+      path: "/users/[userId]",
       view: User,
       name: "Users Info",
     },
     {
-      path: "/users/[id]/posts",
+      path: "/users/[userId]/posts",
       view: UserPosts,
       name: "User Posts",
     },

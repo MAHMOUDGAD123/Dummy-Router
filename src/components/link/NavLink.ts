@@ -5,5 +5,3 @@ export default class NavLink extends AbstractLink {
     super("nav-link");
   }
 }
-
-window.customElements.define("nav-link", NavLink);

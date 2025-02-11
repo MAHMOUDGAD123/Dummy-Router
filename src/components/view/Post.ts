@@ -2,12 +2,12 @@ import AbstractView from "@/components/view/AbstractView";
 import Router from "@/router/router";
 
 export default class extends AbstractView {
-  private params = Router.useParams() as { id: string };
-  private title: string = `Post - ${this.params.id}`;
+  readonly params = Router.useParams() as { id: string };
+  readonly title: string = `Post - ${this.params.id}`;
 
   constructor() {
     super();
-    this.setTitle(this.title);
+    this.setTitle();
   }
 
   public async getHTML() {

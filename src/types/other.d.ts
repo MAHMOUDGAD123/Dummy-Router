@@ -30,3 +30,15 @@ declare namespace Info {
     };
   }
 }
+
+declare namespace Types {
+  type AbstractLinkType = HTMLAnchorElement & {
+    replace: boolean;
+    renderTarget: string | null;
+    strictActive: boolean;
+    dataset: DOMStringMap & {
+      link: string;
+      nav: "";
+    };
+  };
+}

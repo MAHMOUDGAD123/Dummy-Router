@@ -5,5 +5,3 @@ export default class Link extends AbstractLink {
     super("link");
   }
 }
-
-window.customElements.define("a-link", Link);

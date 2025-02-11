@@ -36,8 +36,8 @@ export default class Router {
     this.buildRouteMap(data);
     const fixedLoc = PATH.fixPath(location.pathname);
     const matchedDummyRoute = this.matchPath(fixedLoc);
-    this.historyReplace(fixedLoc); // to set the initial history state to avoid (null)
-    this.updateCurrent(matchedDummyRoute, fixedLoc);
+    this.historyReplace(fixedLoc, null); // to set the initial history state to avoid (null)
+    this.updateCurrent(fixedLoc, null, matchedDummyRoute);
     Router.__instance = this; // set the singleton instance
     Router.clearDummyCacheInterval();
     if (import.meta.env.DEV) {
@@ -68,13 +68,14 @@ export default class Router {
   };
 
   private updateCurrent = (
-    dummyRoute: Router.DummyRoute | undefined,
-    path: string
+    path: string,
+    renderTargetId: string | null,
+    dummyRoute?: Router.DummyRoute
   ) => {
     Router._current = dummyRoute ?? this.dummyNotFoundRoute(path);
     Router._currentPath = path;
     Router.preRender();
-    new Router.current.view().render(path);
+    new Router.current.view().render(path, renderTargetId);
   };
 
   private buildRouteMap = (routes: Router.Route[]) => {
@@ -99,20 +100,20 @@ export default class Router {
     );
   };
 
-  private historyReplace = (path: string) => {
-    history.replaceState({ path }, "", path);
+  private historyReplace = (path: string, renderTargetId: string | null) => {
+    history.replaceState({ path, renderTargetId }, "", path);
   };
-  private historyPush = (path: string) => {
-    history.pushState({ path }, "", path);
+  private historyPush = (path: string, renderTargetId: string | null) => {
+    history.pushState({ path, renderTargetId }, "", path);
   };
 
   private logger = async () => {
     setTimeout(() => {
       console.clear();
-      console.log("current:", Router.current);
+      // console.log("current:", Router.current);
       // console.log("current-path:", Router.currentPath);
-      console.log("cache:", Router._dummyCache);
-      // console.log("history-state:", Router.historyState);
+      // console.log("cache:", Router._dummyCache);
+      console.log("history-state:", Router.historyState);
       // console.log("routeMap:", this.routeMap);
     }, 0);
   };
@@ -120,28 +121,32 @@ export default class Router {
 
   // PUBLICS
   // ===========================================================================================
-  public navigateTo = (path: string, replace: boolean = !1) => {
+  public navigateTo = (
+    path: string,
+    replace: boolean = !1,
+    renderTargetId: string | null
+  ) => {
     if (replace) {
-      this.historyReplace(path);
+      this.historyReplace(path, renderTargetId);
     } else {
-      this.historyPush(path);
+      this.historyPush(path, renderTargetId);
     }
   };
 
   public linkClickNavigation = async (e: MouseEvent) => {
     const linkEle = (e.target as HTMLElement).closest(
       `a[data-link]`
-    ) as HTMLAnchorElement;
+    ) as Types.AbstractLinkType;
 
     if (linkEle) {
       e.preventDefault();
       const path = PATH.fixPath(new URL(linkEle.href).pathname);
-      const dummyPath = PATH.pathToDummyPath(path);
 
-      if (dummyPath !== Router.current.dummyPath) {
+      if (path !== Router.currentPath) {
         const matchedDummyRoute = this.matchPath(path);
-        this.navigateTo(path, linkEle.hasAttribute("replace"));
-        this.updateCurrent(matchedDummyRoute, path);
+        const renderTargetId = linkEle.renderTarget;
+        this.navigateTo(path, linkEle.replace, renderTargetId!);
+        this.updateCurrent(path, renderTargetId, matchedDummyRoute);
         if (import.meta.env.DEV) {
           this.logger();
         }
@@ -150,9 +155,9 @@ export default class Router {
   };
 
   public popStateNavigation = async () => {
-    const path = Router.historyState.path;
+    const { path, renderTargetId } = Router.historyState;
     const matchedDummyRoute = this.matchPath(path);
-    this.updateCurrent(matchedDummyRoute, path);
+    this.updateCurrent(path, renderTargetId, matchedDummyRoute);
     if (import.meta.env.DEV) {
       this.logger();
     }
@@ -207,10 +212,10 @@ export default class Router {
 
   private static setActiveLinks = async () => {
     document.querySelectorAll("a[data-nav]").forEach((ele) => {
-      const link = ele as HTMLAnchorElement;
+      const link = ele as Types.AbstractLinkType;
       const linkPath = new URL(link.href).pathname;
       const isTheSameRoute = linkPath === Router.currentPath;
-      const isActive = link.hasAttribute("strict-active")
+      const isActive = link.strictActive
         ? isTheSameRoute
         : this.matchLinkActiveStaticRoutes(linkPath);
 
