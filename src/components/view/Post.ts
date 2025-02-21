@@ -10,7 +10,7 @@ export default class extends AbstractView {
     this.setTitle();
   }
 
-  public async getHTML() {
+  async getHTML() {
     try {
       const postId = +this.params.id;
       if (postId < 1 || postId > 100) {

@@ -9,7 +9,7 @@ export default class extends AbstractView {
     this.setTitle();
   }
 
-  public async getHTML() {
+  async getHTML() {
     return `
         <div class='flex flex-col gap-[15px] my-[70px]'>
         <i class="fa-solid fa-face-frown text-[5rem]"></i>

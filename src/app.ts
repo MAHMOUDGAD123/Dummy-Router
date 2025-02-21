@@ -42,3 +42,19 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </div>
   </footer>
 `;
+
+// performance observer
+// (async () => {
+//   new PerformanceObserver((list) => {
+//     list.getEntries().forEach((entry) => {
+//       console.log(
+//         `Entry Type: ${entry.entryType},\nName: ${
+//           entry.name
+//         },\nDuration: ${entry.duration.toFixed(2)}ms`
+//       );
+//       console.log("\n-------------------------------------\n");
+//     });
+//   }).observe({
+//     entryTypes: ["navigation", "measure", "paint", "longtask"],
+//   });
+// })();

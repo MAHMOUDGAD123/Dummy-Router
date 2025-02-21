@@ -9,7 +9,7 @@ export default class extends AbstractView {
     this.setTitle();
   }
 
-  public async getHTML() {
+  async getHTML() {
     try {
       const usersData = (await Router.dummyFetch(
         "https://jsonplaceholder.typicode.com/users"

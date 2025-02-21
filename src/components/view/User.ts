@@ -2,9 +2,9 @@ import AbstractView from "@/components/view/AbstractView";
 import Router from "@/router/router";
 
 export default class extends AbstractView {
-  protected readonly params = Router.useParams() as { userId: string };
-  protected readonly title: string = `User - ${this.params.userId}`;
-  protected readonly renderTargets: { userRT: string } = {
+  readonly params = Router.useParams() as { userId: string };
+  readonly title: string = `User - ${this.params.userId}`;
+  readonly renderTargets: { userRT: string } = {
     userRT: "user_rt",
   };
 
@@ -13,7 +13,7 @@ export default class extends AbstractView {
     this.setTitle();
   }
 
-  protected async getStaticHTML(props: { userId: string }) {
+  async getStaticHTML(props: { userId: string }) {
     const { userId } = props;
 
     return `
@@ -24,7 +24,7 @@ export default class extends AbstractView {
     `;
   }
 
-  protected async getDynamicHTML(props: { [k: string]: any }) {
+  async getDynamicHTML(props: { [k: string]: any }) {
     const { userData } = props as { userData: Info.UserInfoType };
 
     return `
@@ -47,7 +47,7 @@ export default class extends AbstractView {
     `;
   }
 
-  public async getHTML(_dynamicOnly: boolean) {
+  async getHTML(_dynamicOnly: boolean) {
     try {
       const userId = +this.params.userId;
 

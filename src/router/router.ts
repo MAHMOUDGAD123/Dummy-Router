@@ -4,12 +4,13 @@ export default class Router {
   private static __instance: Router | null = null;
   private static _current: Router.DummyRoute | null = null;
   private static _currentPath: string = "";
-  private _routeMap: Map<string, Router.DummyRoute> | null = null;
   private static __notFoundView: View.ViewConstructor | null = null;
   private static _dummyCache: Map<string, Router.CacheInfo> | null = null;
   private static _dummyCacheMaxAge: number = 0;
   private static _dummyCacheEnebled: boolean = !1;
   private static _immortalDummyCache: boolean = !1;
+  private _routeMap: Map<string, Router.DummyRoute> | null = null;
+  // private
 
   constructor(routes: Router.Routes, config?: Router.Config) {
     if (Router.__instance) return Router.__instance; // force singleton
@@ -110,11 +111,13 @@ export default class Router {
   private logger = async () => {
     setTimeout(() => {
       console.clear();
-      // console.log("current:", Router.current);
-      // console.log("current-path:", Router.currentPath);
-      // console.log("cache:", Router._dummyCache);
-      console.log("history-state:", Router.historyState);
-      // console.log("routeMap:", this.routeMap);
+      console.log("\x1b[32m\x1b[1m>> Dummy Router Info:", {
+        current: Router.current,
+        currentPath: Router.currentPath,
+        dummyCache: Router._dummyCache,
+        historyState: Router.historyState,
+        routeMap: this.routeMap,
+      });
     }, 0);
   };
   // ===========================================================================================
@@ -145,7 +148,7 @@ export default class Router {
       if (path !== Router.currentPath) {
         const matchedDummyRoute = this.matchPath(path);
         const renderTargetId = linkEle.renderTarget;
-        this.navigateTo(path, linkEle.replace, renderTargetId!);
+        this.navigateTo(path, linkEle.replace, renderTargetId);
         this.updateCurrent(path, renderTargetId, matchedDummyRoute);
         if (import.meta.env.DEV) {
           this.logger();
@@ -254,6 +257,7 @@ export default class Router {
         if (cachedValue && isAlive) return cachedValue;
       }
     }
+
     const data = await fetch(url).then((res) => res.json());
     if (cachable) {
       // save data in dummyCache

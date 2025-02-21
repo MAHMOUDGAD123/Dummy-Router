@@ -9,14 +9,14 @@ export default class extends AbstractView {
     this.setTitle();
   }
 
-  public async getHTML() {
+  async getHTML() {
     try {
       const postsData = (await Router.dummyFetch(
         "https://jsonplaceholder.typicode.com/posts"
       )) as Info.PostInfoType[];
 
       return `
-        <div class='flex flex-wrap *:[flex-basis:200px] max-_lg:*:[flex-basis:350px] p-[30px] gap-[20px] justify-center'>
+        <div class='flex flex-wrap *:[flex-basis:200px] max-_lg:*:[flex-basis:350px] p-[15px] gap-[20px] justify-center *:[content-visibility:auto] max-h-[500px] mt-[30px] [scrollbar-width:none] overflow-auto'>
           ${postsData
             .map(
               (postData) => `

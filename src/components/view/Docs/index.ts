@@ -9,7 +9,7 @@ export default class extends AbstractView {
     this.setTitle();
   }
 
-  public async getHTML() {
+  async getHTML() {
     return template;
   }
 }
