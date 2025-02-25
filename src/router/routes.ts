@@ -1,12 +1,12 @@
-import NotFound from "@/components/view/NotFound";
-import Docs from "@/components/view/Docs";
-import Home from "@/components/view/Home";
-import Post from "@/components/view/Post";
-import Posts from "@/components/view/Posts";
-import User from "@/components/view/User";
-import UserPosts from "@/components/view/UserPosts";
-import Users from "@/components/view/Users";
-import UserPost from "@/components/view/UserPost";
+import NotFound from "@/router/DummyNotFoundView";
+import Docs from "@/components/views/Docs";
+import Home from "@/components/views/Home";
+import Post from "@/components/views/Post";
+import Posts from "@/components/views/Posts";
+import User from "@/components/views/User";
+import UserPosts from "@/components/views/UserPosts";
+import Users from "@/components/views/Users";
+import UserPost from "@/components/views/UserPost";
 
 const ROUTES: Router.Routes = {
   data: [

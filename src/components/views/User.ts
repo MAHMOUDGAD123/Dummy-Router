@@ -1,10 +1,10 @@
-import AbstractView from "@/components/view/AbstractView";
+import DummyView from "@/router/DummyView";
 import Router from "@/router/router";
 
-export default class extends AbstractView {
+export default class extends DummyView {
   readonly params = Router.useParams() as { userId: string };
   readonly title: string = `User - ${this.params.userId}`;
-  readonly renderTargets: { userRT: string } = {
+  readonly renderTargets = {
     userRT: "user_rt",
   };
 

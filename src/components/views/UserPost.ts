@@ -1,5 +1,5 @@
 import Router from "@/router/router";
-import User from "@/components/view/User";
+import User from "@/components/views/User";
 
 export default class extends User {
   readonly params = Router.useParams() as {

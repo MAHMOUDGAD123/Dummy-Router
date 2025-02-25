@@ -1,7 +1,7 @@
-import AbstractView from "./AbstractView";
+import DummyView from "./DummyView";
 import Router from "@/router/router";
 
-export default class extends AbstractView {
+export default class extends DummyView {
   readonly title: string = "404";
 
   constructor() {

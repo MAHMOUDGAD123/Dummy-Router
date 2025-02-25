@@ -71,13 +71,13 @@ export default {
         litTxtCol: "#171717",
         seclitbg: "#eeeeee",
         secdrkbg: "#222222",
+        docsPages: "light-dark(#ddd, #111)",
         itembg: "light-dark(#eee,#222)",
       },
       fontFamily: {
         roboMono: ["robotomono"],
         saira: ["saira"],
       },
-      keyframes: {},
       animation: {
         settleX: "settle-x-gpu 300ms linear forwards",
         spinClockwise: "spin-clockwise 1s linear infinite",

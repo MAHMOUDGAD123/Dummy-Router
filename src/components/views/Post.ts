@@ -1,7 +1,7 @@
-import AbstractView from "@/components/view/AbstractView";
+import DummyView from "@/router/DummyView";
 import Router from "@/router/router";
 
-export default class extends AbstractView {
+export default class extends DummyView {
   readonly params = Router.useParams() as { id: string };
   readonly title: string = `Post - ${this.params.id}`;
 

@@ -4,13 +4,13 @@ export default class Router {
   private static __instance: Router | null = null;
   private static _current: Router.DummyRoute | null = null;
   private static _currentPath: string = "";
+  private static _urlSearchParams: URLSearchParams | null = null;
   private static __notFoundView: View.ViewConstructor | null = null;
   private static _dummyCache: Map<string, Router.CacheInfo> | null = null;
   private static _dummyCacheMaxAge: number = 0;
   private static _dummyCacheEnebled: boolean = !1;
   private static _immortalDummyCache: boolean = !1;
-  private _routeMap: Map<string, Router.DummyRoute> | null = null;
-  // private
+  private static _routeMap: Map<string, Router.DummyRoute> | null = null;
 
   constructor(routes: Router.Routes, config?: Router.Config) {
     if (Router.__instance) return Router.__instance; // force singleton
@@ -35,40 +35,45 @@ export default class Router {
     const { data, notFound } = routes;
     Router.__notFoundView = notFound;
     this.buildRouteMap(data);
-    const fixedLoc = PATH.fixPath(location.pathname);
-    const matchedDummyRoute = this.matchPath(fixedLoc);
-    this.historyReplace(fixedLoc, null); // to set the initial history state to avoid (null)
-    this.updateCurrent(fixedLoc, null, matchedDummyRoute);
-    Router.__instance = this; // set the singleton instance
+    const fixedPath = PATH.fixPath(location.pathname);
+    const matchedDummyRoute = Router.matchPath(fixedPath);
+    Router.setSearchParams(location.search);
+    Router.historyReplace(fixedPath, null); // to set the initial history state to avoid (null)
+    Router.updateCurrent(fixedPath, null, matchedDummyRoute);
     Router.clearDummyCacheInterval();
+    Router.__instance = this; // set the singleton instance
     if (import.meta.env.DEV) {
-      this.logger();
+      Router.logger();
     }
   }
 
   // PRIVATES
   // ===========================================================================================
-  private get routeMap() {
+  private static get routeMap() {
     return this._routeMap!;
   }
 
-  private matchPath = (fixedPath: string) => {
+  private static matchPath = (fixedPath: string) => {
     const dummyPath = PATH.pathToDummyPath(fixedPath);
-    const dummyRoute = this.routeMap.get(dummyPath);
+    const dummyRoute = Router.routeMap.get(dummyPath);
     return dummyRoute;
   };
 
-  private dummyNotFoundRoute = (path: string) => {
+  private static dummyNotFoundRoute = (path: string) => {
     return {
       path: "",
       dummyPath: "",
       params: null,
       view: Router.__notFoundView!,
       static: PATH.getStaticRoutes(path),
-    };
+    } satisfies Router.DummyRoute;
   };
 
-  private updateCurrent = (
+  private static setSearchParams = (searchParams: URLSearchParams | string) => {
+    Router._urlSearchParams = new URLSearchParams(searchParams);
+  };
+
+  private static updateCurrent = (
     path: string,
     renderTargetId: string | null,
     dummyRoute?: Router.DummyRoute
@@ -81,7 +86,7 @@ export default class Router {
 
   private buildRouteMap = (routes: Router.Route[]) => {
     // this map will remove redundant routes too
-    this._routeMap = new Map(
+    Router._routeMap = new Map(
       routes.map((route) => {
         const path = PATH.fixPath(route.path);
         const dummyPath = PATH.pathToDummyPath(path);
@@ -101,30 +106,24 @@ export default class Router {
     );
   };
 
-  private historyReplace = (path: string, renderTargetId: string | null) => {
-    history.replaceState({ path, renderTargetId }, "", path);
+  private static historyReplace = (
+    path: string,
+    renderTargetId: string | null
+  ) => {
+    history.replaceState(
+      { path, renderTargetId },
+      "",
+      Router.getPathQuery(path)
+    );
   };
-  private historyPush = (path: string, renderTargetId: string | null) => {
-    history.pushState({ path, renderTargetId }, "", path);
+  private static historyPush = (
+    path: string,
+    renderTargetId: string | null
+  ) => {
+    history.pushState({ path, renderTargetId }, "", Router.getPathQuery(path));
   };
 
-  private logger = async () => {
-    setTimeout(() => {
-      console.clear();
-      console.log("\x1b[32m\x1b[1m>> Dummy Router Info:", {
-        current: Router.current,
-        currentPath: Router.currentPath,
-        dummyCache: Router._dummyCache,
-        historyState: Router.historyState,
-        routeMap: this.routeMap,
-      });
-    }, 0);
-  };
-  // ===========================================================================================
-
-  // PUBLICS
-  // ===========================================================================================
-  public navigateTo = (
+  private static updateHistory = (
     path: string,
     replace: boolean = !1,
     renderTargetId: string | null
@@ -136,6 +135,43 @@ export default class Router {
     }
   };
 
+  private static logger = async (moreData?: any) => {
+    setTimeout(() => {
+      console.clear();
+      console.log("\x1b[32m\x1b[1m>> Dummy Router Info:", {
+        current: Router.current,
+        currentPath: Router.currentPath,
+        dummyCache: Router._dummyCache,
+        historyState: Router.historyState,
+        routeMap: this.routeMap,
+        urlSearchParams: Object.fromEntries(Router._urlSearchParams!.entries()),
+        pathQuery: Router.getPathQuery(),
+        moreData,
+      });
+    }, 0);
+  };
+  // ===========================================================================================
+
+  // PUBLICS
+  // ===========================================================================================
+  public static navigateTo = async (
+    pathQuery: string,
+    renderTargetId: string
+  ) => {
+    const url = new URL(location.origin + pathQuery);
+
+    if (pathQuery !== Router.getPathQuery()) {
+      const pathname = url.pathname;
+      const matchedDummyRoute = Router.matchPath(pathname);
+      Router.setSearchParams(url.searchParams);
+      Router.historyPush(pathname, renderTargetId);
+      Router.updateCurrent(pathname, renderTargetId, matchedDummyRoute);
+      if (import.meta.env.DEV) {
+        Router.logger(url.search);
+      }
+    }
+  };
+
   public linkClickNavigation = async (e: MouseEvent) => {
     const linkEle = (e.target as HTMLElement).closest(
       `a[data-link]`
@@ -143,15 +179,17 @@ export default class Router {
 
     if (linkEle) {
       e.preventDefault();
-      const path = PATH.fixPath(new URL(linkEle.href).pathname);
+      const url = new URL(linkEle.href);
+      const fixedPath = PATH.fixPath(url.pathname);
 
-      if (path !== Router.currentPath) {
-        const matchedDummyRoute = this.matchPath(path);
+      if (fixedPath !== Router.currentPath) {
+        const matchedDummyRoute = Router.matchPath(fixedPath);
         const renderTargetId = linkEle.renderTarget;
-        this.navigateTo(path, linkEle.replace, renderTargetId);
-        this.updateCurrent(path, renderTargetId, matchedDummyRoute);
+        Router.setSearchParams(url.searchParams);
+        Router.updateHistory(fixedPath, linkEle.replace, renderTargetId);
+        Router.updateCurrent(fixedPath, renderTargetId, matchedDummyRoute);
         if (import.meta.env.DEV) {
-          this.logger();
+          Router.logger();
         }
       }
     }
@@ -159,10 +197,11 @@ export default class Router {
 
   public popStateNavigation = async () => {
     const { path, renderTargetId } = Router.historyState;
-    const matchedDummyRoute = this.matchPath(path);
-    this.updateCurrent(path, renderTargetId, matchedDummyRoute);
+    const matchedDummyRoute = Router.matchPath(path);
+    Router.setSearchParams(location.search);
+    Router.updateCurrent(path, renderTargetId, matchedDummyRoute);
     if (import.meta.env.DEV) {
-      this.logger();
+      Router.logger();
     }
   };
   // ===========================================================================================
@@ -182,6 +221,13 @@ export default class Router {
     }
     return null;
   };
+
+  public static getPathQuery(path?: string) {
+    const pathname = path ?? location.pathname;
+    return Router._urlSearchParams?.size
+      ? `${pathname}?${Router._urlSearchParams.toString()}`
+      : pathname;
+  }
 
   public static get historyState() {
     return history.state as Router.HistoryState;
@@ -279,18 +325,22 @@ export default class Router {
     }, Router._dummyCacheMaxAge);
   };
 
-  /** this function called by the view after the render is done */
-  public static postRender = async () => {
+  /** this function called by the updateCurrent funciton before the render */
+  public static preRender = async () => {
     Router.setActiveLinks();
   };
 
-  /** this function called by the view before the render */
-  public static preRender = async () => {
+  /** this function called by the DummyView after the render is done. */
+  public static postRender = async () => {
     Router.setActiveLinks();
   };
 
   public static useParams = () => {
     return Router.getMatchedParams();
+  };
+
+  public static useSearchParams = () => {
+    return Router._urlSearchParams;
   };
   // ===========================================================================================
 }

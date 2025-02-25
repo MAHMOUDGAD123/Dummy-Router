@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const router = new Router(ROUTES, {
     cache: true,
     immortalCache: true,
-    defaultRenderTargetId: "__main__",
   });
   window.onpopstate = router.popStateNavigation;
   document.onclick = router.linkClickNavigation;

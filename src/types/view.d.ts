@@ -3,6 +3,7 @@ declare namespace View {
     readonly #loadingStateRenderDelay: number;
     readonly title: string;
     readonly params: { [k: string]: string };
+    readonly searchParams: URLSearchParams | null;
     readonly renderTargets: { [k: string]: string };
     #renderElementId: string;
     #canRenderLoadingState: boolean;
@@ -53,7 +54,10 @@ declare namespace View {
      * @param renderTargetId the id of the render element that is going to be the target of the rendering
      */
     render(currentPath: string, renderTargetId: string | null): Promise<void>;
+
+    /** this funciton will be called by the DummyView instance after render funciton is done. */
+    overheadWork(): Promise<void>;
   }
 
-  type ViewConstructor = new () => AbstractView;
+  type ViewConstructor = new () => AbstractViewType;
 }

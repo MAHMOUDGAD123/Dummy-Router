@@ -1,8 +1,8 @@
-import AbstractView from "@/components/view/AbstractView";
+import DummyView from "@/router/DummyView";
 import template from "./template.html?raw";
 
-export default class extends AbstractView {
-  readonly title: string = "Docs";
+export default class extends DummyView {
+  readonly title: string = "Home";
 
   constructor() {
     super();

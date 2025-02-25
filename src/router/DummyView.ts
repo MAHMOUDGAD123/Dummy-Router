@@ -6,6 +6,7 @@ export default abstract class AbstractView implements View.AbstractViewType {
   readonly #loadingStateRenderDelay: number = 100; // ms
   readonly title: string = "DR";
   readonly params: { [k: string]: string } = {};
+  readonly searchParams: URLSearchParams | null = null;
   readonly renderTargets: { [k: string]: string } = {};
 
   setTitle(): void {
@@ -41,18 +42,29 @@ export default abstract class AbstractView implements View.AbstractViewType {
       <div class='flex flex-col gap-[15px] my-[70px]'>
         <i class="fa-solid fa-face-frown text-[5rem]"></i>
         <h1 class='text-[1.75rem] font-extrabold font-saira'>Sad Dummy</h1>
-        <p>${err.message}</p>
-      </div>
+        ${(() => {
+          return import.meta.env.PROD
+            ? `<p>Somthing went wrong</p>`
+            : `
+              <p>${err.message}</p>
+              <p class=" text-[0.9rem] opacity-60 p-2">${err.stack}</p>
+              `;
+        })()}
+          </div>
     `;
   }
 
-  public async render(
+  async overheadWork(): Promise<void> {}
+
+  async render(
     currentPath: string,
     renderTargetId: string | null
   ): Promise<void> {
     let renderdynamicHTMLOnly = false;
 
-    if (renderTargetId) {
+    // make sure that the (renderTargetId) was sent
+    // and the element with that target id is exists
+    if (renderTargetId && document.getElementById(renderTargetId) !== null) {
       this.#renderElementId = renderTargetId;
       renderdynamicHTMLOnly = true;
     }
@@ -65,6 +77,7 @@ export default abstract class AbstractView implements View.AbstractViewType {
     if (canRender) {
       document.getElementById(this.#renderElementId)!.innerHTML = html;
       Router.postRender();
+      this.overheadWork();
     }
   }
 }

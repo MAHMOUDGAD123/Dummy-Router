@@ -20,8 +20,9 @@
 
   --prm-col: #1e90ff;
   --prm-col-95: #1e90ff95;
+  --prm-col-50: #1e90ff50;
   --prm-col-40: #1e90ff40;
-  --prm-col-30: #1e90ff40;
+  --prm-col-30: #1e90ff30;
   --trans: 300ms;
 
   scroll-behavior: smooth;
@@ -153,6 +154,40 @@ button {
       left: 10px;
       font-family: saira;
       color: var(--prm-col-95);
+    }
+  }
+}
+
+.filters {
+  margin: 30px auto;
+  width: fit-content;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  & > [name="filter"] {
+    border-radius: 10px;
+    background-color: var(--prm-col-30);
+    padding: 5px 10px;
+    appearance: none;
+    cursor: pointer;
+    transition: background-color var(--trans);
+
+    &:hover {
+      background-color: var(--prm-col-50);
+    }
+
+    &:checked {
+      background-color: var(--prm-col-95);
+    }
+
+    &::before {
+      content: attr(data-label);
+      font-size: 1rem;
+      transition: none;
     }
   }
 }
