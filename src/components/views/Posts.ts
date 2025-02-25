@@ -10,7 +10,7 @@ export default class extends DummyView {
 
   private readonly filterMap: Map<string, string> = new Map(
     new Array(10).fill(0).map((_, i) => {
-      return [`_U${i + 1}_`, `/posts?userId=${i + 1}`];
+      return [`_U${i + 1}_`, `/posts?userid=${i + 1}`];
     })
   );
 
@@ -86,7 +86,7 @@ export default class extends DummyView {
 
   async getHTML(_dynamicOnly: boolean) {
     try {
-      const userId = this.searchParams!.get("userId");
+      const userId = this.searchParams!.get("userid");
 
       let postsData = (await Router.dummyFetch(
         "https://jsonplaceholder.typicode.com/posts"
