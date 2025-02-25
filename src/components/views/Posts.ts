@@ -92,7 +92,7 @@ export default class extends DummyView {
         "https://jsonplaceholder.typicode.com/posts"
       )) as Info.PostInfoType[];
 
-      if (userId) {
+      if (userId && this.filterMap.has(`_U${userId}_`)) {
         postsData = postsData.filter((post) => post.userId === +userId);
       }
 
